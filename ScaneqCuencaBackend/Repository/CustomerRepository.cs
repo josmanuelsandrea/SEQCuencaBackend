@@ -4,14 +4,18 @@ namespace ScaneqCuencaBackend.Repository
 {
     public class CustomerRepository
     {
-        private readonly static DbScaniaCuencaContext _db = new DbScaniaCuencaContext();
+        private readonly DbScaniaCuencaContext _db;
+        public CustomerRepository(DbScaniaCuencaContext context)
+        {
+            _db = context;
+        }
 
-        public static List<Customer> getAllCustomers()
+        public List<Customer> getAllCustomers()
         {
             return _db.Customers.ToList();
         }
 
-        public static Customer? getCustomerById(int id)
+        public Customer? getCustomerById(int id)
         {
             return _db.Customers.Where(x => x.Id == id).FirstOrDefault();
         }

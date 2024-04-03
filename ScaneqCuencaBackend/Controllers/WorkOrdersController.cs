@@ -13,36 +13,26 @@ namespace ScaneqCuencaBackend.Controllers
     [ApiController]
     public class WorkOrdersController : ControllerBase
     {
+        private readonly DbScaniaCuencaContext _db;
+        private readonly WorkOrderBll _workOrderB;
+        public WorkOrdersController(DbScaniaCuencaContext db)
+        {
+            _db = db;
+            _workOrderB = new WorkOrderBll(db);
+        }
         //GET: api/<CustomerController>
         [HttpGet]
         public dynamic GetWorkOrderByCustomerId([FromQuery] int customerId)
         {
-            return WorkOrderBll.getAllWorkOrdersByCustomerId(customerId);
+            return _workOrderB.getAllWorkOrdersByCustomerId(customerId);
         }
 
         // GET api/<work_orders>/5
         [HttpGet("{id}")]
         public WorkOrderResponseModel Get(int id)
         {
-            return WorkOrderBll.getWorkOrderById(id);
-        }
-
-        // POST api/<work_orders>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<work_orders>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<work_orders>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return _workOrderB.getWorkOrderById(id);
         }
     }
 }
+

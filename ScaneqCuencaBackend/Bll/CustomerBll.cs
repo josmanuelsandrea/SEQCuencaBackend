@@ -4,12 +4,19 @@ using ScaneqCuencaBackend.Repository;
 
 namespace ScaneqCuencaBackend.Bll
 {
-    public static class CustomerBll
+    public class CustomerBll
     {
-        public static List<CustomerResponseModel> getAllCustomers()
+        private readonly DbScaniaCuencaContext _context;
+        private readonly CustomerRepository _customerR;
+        public CustomerBll(DbScaniaCuencaContext db)
         {
-            List<Customer> result = CustomerRepository.getAllCustomers();
-            List<CustomerResponseModel> response = new List<CustomerResponseModel>();
+            _context = db;
+            _customerR = new CustomerRepository(db);
+        }
+        public List<CustomerResponseModel> getAllCustomers()
+        {
+            List<Customer> result = _customerR.getAllCustomers();
+            List<CustomerResponseModel> response = new ();
             foreach (Customer customer in result)
             {
                 response.Add(new CustomerResponseModel()
@@ -21,9 +28,9 @@ namespace ScaneqCuencaBackend.Bll
 
             return response;
         }
-        public static CustomerResponseModel getCustomerById(int id)
+        public CustomerResponseModel getCustomerById(int id)
         {
-            Customer result = CustomerRepository.getCustomerById(id);
+            Customer? result = _customerR.getCustomerById(id);
             CustomerResponseModel response = new CustomerResponseModel()
             {
                 Id = result.Id,
