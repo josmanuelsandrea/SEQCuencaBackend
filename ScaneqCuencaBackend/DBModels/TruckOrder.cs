@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace ScaneqCuencaBackend.DBModels;
 
-public partial class WorkOrder
+public partial class TruckOrder
 {
-    public int Uid { get; set; }
+    public int Id { get; set; }
 
     public int Fid { get; set; }
 
@@ -27,5 +27,9 @@ public partial class WorkOrder
 
     public int Storedvolume { get; set; }
 
+    public int? VehicleId { get; set; }
+
     public virtual Customer Customer { get; set; } = null!;
+
+    public virtual Vehicle? Vehicle { get; set; }
 }

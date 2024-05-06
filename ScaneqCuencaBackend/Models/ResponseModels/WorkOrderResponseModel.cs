@@ -7,7 +7,7 @@ namespace ScaneqCuencaBackend.Models.ResponseModels
         public int Uid { get; set; }
         public int Fid { get; set; }
         public DateOnly DateField { get; set; }
-        public CustomerResponseModel Customer { get; set; }
+        public int Customer { get; set; }
         public string? Description { get; set; }
         public decimal Billquantity { get; set; }
         public decimal Labourcost { get; set; }

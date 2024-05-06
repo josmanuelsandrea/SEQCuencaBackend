@@ -54,12 +54,17 @@ namespace ScaneqCuencaBackend.Controllers
             var createdUser = _repository.CreateCustomer(model);
             if (createdUser == null)
             {
-                BadRequest();
+                BadRequest(new
+                {
+                    response = "An error ocurred.",
+                    responseCode = 500
+                });
             }
 
             return Ok(new
             {
-                response = "Customer created successfully"
+                response = "Customer created successfully",
+                responseCode = 200
             });
         }
     }

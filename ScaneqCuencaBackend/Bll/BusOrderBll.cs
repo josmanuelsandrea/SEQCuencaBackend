@@ -4,21 +4,22 @@ using ScaneqCuencaBackend.Repository;
 
 namespace ScaneqCuencaBackend.Bll
 {
-    public class WorkOrderBll
+    public class BusOrderBll
     {
-        private readonly WorkOrderRepository _workOrderR;
+        private readonly BusOrdersRepository _busOrderR;
         private readonly CustomerBll _customerB;
-        public WorkOrderBll(DbScaniaCuencaContext db)
+        public BusOrderBll(DbScaniaCuencaContext db)
         {
-            _workOrderR = new WorkOrderRepository(db);
+            _busOrderR = new BusOrdersRepository(db);
             _customerB = new CustomerBll(db);
         }
+
         public WorkOrderResponseModel getWorkOrderById(int id)
         {
-            WorkOrder workOrderFound = _workOrderR.getWorkOrderByNumber(id);
+            BusOrder workOrderFound = _busOrderR.getWorkOrderByNumber(id);
             WorkOrderResponseModel response = new()
             {
-                Uid = workOrderFound.Uid,
+                Uid = workOrderFound.Id,
                 Fid = workOrderFound.Fid,
                 Billquantity = workOrderFound.Billquantity,
                 DateField = workOrderFound.DateField,
@@ -28,19 +29,21 @@ namespace ScaneqCuencaBackend.Bll
                 Kilometers = workOrderFound.Kilometers,
                 Labourcost = workOrderFound.Labourcost,
                 Storedvolume = workOrderFound.Storedvolume,
-                Customer = _customerB.getCustomerById(workOrderFound.CustomerId),
+                Customer = workOrderFound.CustomerId
             };
+
             return response;
         }
+
         public List<WorkOrderResponseModel> getAllWorkOrdersByCustomerId(int customerId)
         {
-            List<WorkOrder> result = _workOrderR.getAllWorkOrdersByCustomerId(customerId);
+            List<BusOrder> result = _busOrderR.getAllWorkOrdersByCustomerId(customerId);
             List<WorkOrderResponseModel> response = new();
-            foreach (WorkOrder item in result)
+            foreach (BusOrder item in result)
             {
                 response.Add(new WorkOrderResponseModel()
                 {
-                    Uid = item.Uid,
+                    Uid = item.Id,
                     Fid = item.Fid,
                     Billquantity = item.Billquantity,
                     DateField = item.DateField,
@@ -50,9 +53,10 @@ namespace ScaneqCuencaBackend.Bll
                     Kilometers = item.Kilometers,
                     Labourcost = item.Labourcost,
                     Storedvolume = item.Storedvolume,
-                    Customer = _customerB.getCustomerById(item.CustomerId),
+                    Customer = item.CustomerId,
                 });
             }
+
             return response;
         }
     }

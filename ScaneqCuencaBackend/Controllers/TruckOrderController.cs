@@ -2,8 +2,6 @@
 using ScaneqCuencaBackend.Bll;
 using ScaneqCuencaBackend.DBModels;
 using ScaneqCuencaBackend.Models.ResponseModels;
-using ScaneqCuencaBackend.Params;
-using ScaneqCuencaBackend.Repository;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,27 +9,27 @@ namespace ScaneqCuencaBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class WorkOrdersController : ControllerBase
+    public class TruckOrderController : ControllerBase
     {
         private readonly DbScaniaCuencaContext _db;
-        private readonly WorkOrderBll _workOrderB;
-        public WorkOrdersController(DbScaniaCuencaContext db)
+        private readonly TruckOrderBll _truckOrderB;
+        public TruckOrderController(DbScaniaCuencaContext db)
         {
             _db = db;
-            _workOrderB = new WorkOrderBll(db);
+            _truckOrderB = new TruckOrderBll(db);
         }
         //GET: api/<CustomerController>
-        [HttpGet]
-        public dynamic GetWorkOrderByCustomerId([FromQuery] int customerId)
+        [HttpGet("customer/{id}")]
+        public dynamic GetWorkOrderByCustomerId(int customerId)
         {
-            return _workOrderB.getAllWorkOrdersByCustomerId(customerId);
+            return _truckOrderB.getAllWorkOrdersByCustomerId(customerId);
         }
 
         // GET api/<work_orders>/5
         [HttpGet("{id}")]
         public WorkOrderResponseModel Get(int id)
         {
-            return _workOrderB.getWorkOrderById(id);
+            return _truckOrderB.getWorkOrderById(id);
         }
     }
 }
