@@ -8,7 +8,7 @@ namespace ScaneqCuencaBackend.Bll
     {
         private readonly BusOrdersRepository _busOrderR;
         private readonly CustomerBll _customerB;
-        public BusOrderBll(DbScaniaCuencaContext db)
+        public BusOrderBll(SeqcuencabackendContext db)
         {
             _busOrderR = new BusOrdersRepository(db);
             _customerB = new CustomerBll(db);
@@ -21,13 +21,11 @@ namespace ScaneqCuencaBackend.Bll
             {
                 Uid = workOrderFound.Id,
                 Fid = workOrderFound.Fid,
-                Billquantity = workOrderFound.Billquantity,
                 DateField = workOrderFound.DateField,
                 Description = workOrderFound.Description,
                 Isarchived = workOrderFound.Isarchived,
                 Iswarranty = workOrderFound.Iswarranty,
                 Kilometers = workOrderFound.Kilometers,
-                Labourcost = workOrderFound.Labourcost,
                 Storedvolume = workOrderFound.Storedvolume,
                 Customer = workOrderFound.CustomerId
             };
@@ -45,13 +43,11 @@ namespace ScaneqCuencaBackend.Bll
                 {
                     Uid = item.Id,
                     Fid = item.Fid,
-                    Billquantity = item.Billquantity,
                     DateField = item.DateField,
                     Description = item.Description,
                     Isarchived = item.Isarchived,
                     Iswarranty = item.Iswarranty,
                     Kilometers = item.Kilometers,
-                    Labourcost = item.Labourcost,
                     Storedvolume = item.Storedvolume,
                     Customer = item.CustomerId,
                 });

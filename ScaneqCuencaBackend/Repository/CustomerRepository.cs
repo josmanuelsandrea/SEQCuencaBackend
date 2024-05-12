@@ -6,8 +6,8 @@ namespace ScaneqCuencaBackend.Repository
 {
     public class CustomerRepository
     {
-        private readonly DbScaniaCuencaContext _db;
-        public CustomerRepository(DbScaniaCuencaContext context)
+        private readonly SeqcuencabackendContext _db;
+        public CustomerRepository(SeqcuencabackendContext context)
         {
             _db = context;
         }

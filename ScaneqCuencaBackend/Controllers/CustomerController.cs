@@ -14,9 +14,9 @@ namespace ScaneqCuencaBackend.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly CustomerBll _customerB;
-        private readonly DbScaniaCuencaContext _db;
+        private readonly SeqcuencabackendContext _db;
         private readonly CustomerRepository _repository;
-        public CustomerController(DbScaniaCuencaContext context)
+        public CustomerController(SeqcuencabackendContext context)
         {
             _db = context;
             _customerB = new CustomerBll(context);
@@ -46,6 +46,12 @@ namespace ScaneqCuencaBackend.Controllers
             };
 
             return Ok(response);
+        }
+
+        [HttpGet("vehicles/{id}")]
+        public List<Vehicle> GetVehicles(int id)
+        {
+            return _customerB.getCustomerVehicles(id);
         }
 
         [HttpPost]

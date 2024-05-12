@@ -9,8 +9,6 @@ namespace ScaneqCuencaBackend.Models.ResponseModels
         public DateOnly DateField { get; set; }
         public int Customer { get; set; }
         public string? Description { get; set; }
-        public decimal Billquantity { get; set; }
-        public decimal Labourcost { get; set; }
         public bool Iswarranty { get; set; }
         public int Kilometers { get; set; }
         public bool Isarchived { get; set; }

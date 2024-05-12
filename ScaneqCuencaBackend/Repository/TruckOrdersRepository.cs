@@ -4,8 +4,8 @@ namespace ScaneqCuencaBackend.Repository
 {
     public class TruckOrdersRepository
     {
-        private readonly DbScaniaCuencaContext _db;
-        public TruckOrdersRepository(DbScaniaCuencaContext db)
+        private readonly SeqcuencabackendContext _db;
+        public TruckOrdersRepository(SeqcuencabackendContext db)
         {
             _db = db;
         }
@@ -17,6 +17,11 @@ namespace ScaneqCuencaBackend.Repository
         public List<TruckOrder> getAllWorkOrdersByCustomerId(int id)
         {
             return _db.TruckOrders.Where(x => x.CustomerId == id).ToList();
+        }
+
+        public List<TruckOrder> getWorkOrderByVehicleId(int id)
+        {
+            return _db.TruckOrders.Where(x => x.VehicleId == id).ToList();
         }
     }
 }

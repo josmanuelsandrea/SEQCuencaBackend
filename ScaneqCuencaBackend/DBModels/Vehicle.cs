@@ -7,15 +7,15 @@ public partial class Vehicle
 {
     public int Id { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string? Model { get; set; }
 
-    public string Vin { get; set; } = null!;
+    public string? Vin { get; set; }
 
-    public string Color { get; set; } = null!;
+    public string? Color { get; set; }
 
-    public string Engine { get; set; } = null!;
+    public string? Engine { get; set; }
 
-    public int Year { get; set; }
+    public int? Year { get; set; }
 
     public string? Gearbox { get; set; }
 
@@ -23,13 +23,15 @@ public partial class Vehicle
 
     public decimal? RearAxleGearRatio { get; set; }
 
-    public int CustomerId { get; set; }
+    public int? CustomerId { get; set; }
 
     public string Plate { get; set; } = null!;
 
+    public string? Type { get; set; }
+
     public virtual ICollection<BusOrder> BusOrders { get; set; } = new List<BusOrder>();
 
-    public virtual Customer Customer { get; set; } = null!;
+    public virtual Customer? Customer { get; set; }
 
     public virtual ICollection<TruckOrder> TruckOrders { get; set; } = new List<TruckOrder>();
 }

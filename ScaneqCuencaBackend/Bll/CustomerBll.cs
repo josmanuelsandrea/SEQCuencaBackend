@@ -6,12 +6,14 @@ namespace ScaneqCuencaBackend.Bll
 {
     public class CustomerBll
     {
-        private readonly DbScaniaCuencaContext _context;
+        private readonly SeqcuencabackendContext _context;
         private readonly CustomerRepository _customerR;
-        public CustomerBll(DbScaniaCuencaContext db)
+        private readonly VehicleRepository _vehicleR;
+        public CustomerBll(SeqcuencabackendContext db)
         {
             _context = db;
             _customerR = new CustomerRepository(db);
+            _vehicleR = new VehicleRepository(db);
         }
         public List<CustomerResponseModel> getAllCustomers()
         {
@@ -31,13 +33,20 @@ namespace ScaneqCuencaBackend.Bll
         public CustomerResponseModel getCustomerById(int id)
         {
             Customer? result = _customerR.getCustomerById(id);
-            CustomerResponseModel response = new CustomerResponseModel()
+            CustomerResponseModel response = new ()
             {
                 Id = result.Id,
                 Name = result.Name
             };
 
             return response;
+        }
+
+        public List<Vehicle> getCustomerVehicles(int id)
+        {
+            List<Vehicle> vehicles = _vehicleR.getVehiclesByCustomerId(id);
+
+            return vehicles;
         }
     }
 }

@@ -15,10 +15,6 @@ public partial class TruckOrder
 
     public string? Description { get; set; }
 
-    public decimal Billquantity { get; set; }
-
-    public decimal Labourcost { get; set; }
-
     public bool Iswarranty { get; set; }
 
     public int Kilometers { get; set; }

@@ -11,9 +11,9 @@ namespace ScaneqCuencaBackend.Controllers
     [ApiController]
     public class BusOrderController : ControllerBase
     {
-        private readonly DbScaniaCuencaContext _db;
+        private readonly SeqcuencabackendContext _db;
         private readonly BusOrderBll _busOrderB;
-        public BusOrderController(DbScaniaCuencaContext db)
+        public BusOrderController(SeqcuencabackendContext db)
         {
             _db = db;
             _busOrderB = new BusOrderBll(db);
