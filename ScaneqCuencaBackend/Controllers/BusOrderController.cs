@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using ScaneqCuencaBackend.Bll;
 using ScaneqCuencaBackend.DBModels;
 using ScaneqCuencaBackend.Models.ResponseModels;
@@ -13,10 +14,11 @@ namespace ScaneqCuencaBackend.Controllers
     {
         private readonly SeqcuencabackendContext _db;
         private readonly BusOrderBll _busOrderB;
-        public BusOrderController(SeqcuencabackendContext db)
+        private readonly IMapper _mapper;
+        public BusOrderController(SeqcuencabackendContext db, IMapper mapper)
         {
             _db = db;
-            _busOrderB = new BusOrderBll(db);
+            _busOrderB = new BusOrderBll(db, mapper);
         }
         [HttpGet("customer/{id}")]
         public dynamic GetWorkOrderByCustomerId(int id)

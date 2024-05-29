@@ -1,4 +1,5 @@
-﻿using ScaneqCuencaBackend.DBModels;
+﻿using AutoMapper;
+using ScaneqCuencaBackend.DBModels;
 using ScaneqCuencaBackend.Models.ResponseModels;
 using ScaneqCuencaBackend.Repository;
 
@@ -9,11 +10,11 @@ namespace ScaneqCuencaBackend.Bll
         private readonly SeqcuencabackendContext _context;
         private readonly CustomerRepository _customerR;
         private readonly VehicleRepository _vehicleR;
-        public CustomerBll(SeqcuencabackendContext db)
+        public CustomerBll(SeqcuencabackendContext db, IMapper mapper)
         {
             _context = db;
             _customerR = new CustomerRepository(db);
-            _vehicleR = new VehicleRepository(db);
+            _vehicleR = new VehicleRepository(db, mapper);
         }
         public List<CustomerResponseModel> getAllCustomers()
         {

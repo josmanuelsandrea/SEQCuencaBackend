@@ -1,5 +1,6 @@
 using ScaneqCuencaBackend.DBModels;
 using Microsoft.EntityFrameworkCore;
+using ScaneqCuencaBackend.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<SeqcuencabackendContext>(options => options.UseNpgsql((new ConfigurationBuilder()).AddJsonFile("appsettings.json").Build().GetSection("DB").GetValue<string>("connection")));
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using ScaneqCuencaBackend.Bll;
 using ScaneqCuencaBackend.DBModels;
 using ScaneqCuencaBackend.Models.ResponseModels;
@@ -13,10 +14,11 @@ namespace ScaneqCuencaBackend.Controllers
     {
         private readonly SeqcuencabackendContext _db;
         private readonly TruckOrderBll _truckOrderB;
-        public TruckOrderController(SeqcuencabackendContext db)
+        private readonly IMapper _mapper;
+        public TruckOrderController(SeqcuencabackendContext db, IMapper mapper)
         {
             _db = db;
-            _truckOrderB = new TruckOrderBll(db);
+            _truckOrderB = new TruckOrderBll(db, mapper);
         }
         //GET: api/<CustomerController>
         [HttpGet("customer/{id}")]

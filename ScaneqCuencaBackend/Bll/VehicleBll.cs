@@ -1,4 +1,6 @@
-﻿using ScaneqCuencaBackend.DBModels;
+﻿using AutoMapper;
+using ScaneqCuencaBackend.DBModels;
+using ScaneqCuencaBackend.Models.RequestModels;
 using ScaneqCuencaBackend.Models.ResponseModels;
 using ScaneqCuencaBackend.Repository;
 
@@ -9,12 +11,14 @@ namespace ScaneqCuencaBackend.Bll
         private readonly SeqcuencabackendContext _db;
         private readonly BusOrdersRepository _BusOrderR;
         private readonly TruckOrdersRepository _TruckOrdersR;
+        private readonly VehicleRepository _VehicleRepository;
 
-        public VehicleBll(SeqcuencabackendContext db)
+        public VehicleBll(SeqcuencabackendContext db, IMapper mapper)
         {
             _db = db;
             _BusOrderR = new BusOrdersRepository(_db);
             _TruckOrdersR = new TruckOrdersRepository(_db);
+            _VehicleRepository = new VehicleRepository(_db, mapper);
         }
 
         public List<WorkOrderResponseModel> getWorkOrderByVehicleId(int id, string type)
@@ -63,6 +67,10 @@ namespace ScaneqCuencaBackend.Bll
 
                 return response;
             }
+        }
+        public Vehicle createVehicle(VehicleCreateRequest model, IMapper mapper)
+        {
+            return _VehicleRepository.createVehicle(model);
         }
     }
 }

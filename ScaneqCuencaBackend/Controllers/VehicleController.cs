@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using ScaneqCuencaBackend.Bll;
 using ScaneqCuencaBackend.DBModels;
 using ScaneqCuencaBackend.Models.RequestModels;
@@ -14,18 +15,24 @@ namespace ScaneqCuencaBackend.Controllers
     {
         private readonly VehicleBll _vehicleB;
         private readonly SeqcuencabackendContext _db;
+        private readonly IMapper _mapper;
 
-        public VehicleController(SeqcuencabackendContext db)
+        public VehicleController(SeqcuencabackendContext db, IMapper mapper)
         {
             _db = db;
-            _vehicleB = new VehicleBll(_db);
+            _vehicleB = new VehicleBll(_db, mapper);
+            _mapper = mapper;
         }
-
-        // GET: api/<VehicleController>
         [HttpPost("{id}")]
-        public List<WorkOrderResponseModel> Get(int id, [FromBody] VehicleTypeRequest data)
+        public List<WorkOrderResponseModel> GetVehicles(int id, [FromBody] VehicleTypeRequest data)
         {
             return _vehicleB.getWorkOrderByVehicleId(id, data.type);
+        }
+
+        [HttpPost]
+        public Vehicle? CreateVehicle([FromBody] VehicleCreateRequest data)
+        {
+            return _vehicleB.createVehicle(data, _mapper);
         }
     }
 }

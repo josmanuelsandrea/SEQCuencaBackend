@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using ScaneqCuencaBackend.Bll;
 using ScaneqCuencaBackend.DBModels;
 using ScaneqCuencaBackend.Models.RequestModels;
@@ -16,10 +17,12 @@ namespace ScaneqCuencaBackend.Controllers
         private readonly CustomerBll _customerB;
         private readonly SeqcuencabackendContext _db;
         private readonly CustomerRepository _repository;
-        public CustomerController(SeqcuencabackendContext context)
+        private readonly IMapper _mapper;
+
+        public CustomerController(SeqcuencabackendContext context, IMapper mapper)
         {
             _db = context;
-            _customerB = new CustomerBll(context);
+            _customerB = new CustomerBll(context, mapper);
             _repository = new CustomerRepository(context);
         }
         //GET: api/<CustomerController>
