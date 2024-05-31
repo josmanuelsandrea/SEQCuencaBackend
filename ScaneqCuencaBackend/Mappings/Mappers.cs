@@ -9,6 +9,8 @@ namespace ScaneqCuencaBackend.Mappings
         public MappingProfile()
         {
             CreateMap<VehicleCreateRequest, Vehicle>();
+            CreateMap<WorkOrderRequestModel, BusOrder>();
+            CreateMap<WorkOrderRequestModel, TruckOrder>();
             // Add other mappings here
         }
     }

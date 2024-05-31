@@ -1,4 +1,6 @@
-﻿using ScaneqCuencaBackend.DBModels;
+﻿using AutoMapper;
+using ScaneqCuencaBackend.DBModels;
+using ScaneqCuencaBackend.Models.RequestModels;
 
 namespace ScaneqCuencaBackend.Repository
 {
@@ -22,6 +24,13 @@ namespace ScaneqCuencaBackend.Repository
         public List<BusOrder> getWorkOrderByVehicleId(int id)
         {
             return _db.BusOrders.Where(x => x.VehicleId == id).ToList();
+        }
+
+        public BusOrder createWorkOrder(BusOrder model)
+        {
+            _db.BusOrders.Add(model);
+            _db.SaveChanges();
+            return model;
         }
     }
 }

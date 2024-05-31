@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ScaneqCuencaBackend.Bll;
 using ScaneqCuencaBackend.DBModels;
+using ScaneqCuencaBackend.Models.RequestModels;
 using ScaneqCuencaBackend.Models.ResponseModels;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -31,6 +32,18 @@ namespace ScaneqCuencaBackend.Controllers
         public WorkOrderResponseModel Get(int id)
         {
             return _busOrderB.getWorkOrderById(id);
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] WorkOrderRequestModel data)
+        {
+            var result = _busOrderB.createWorkOrder(data);
+            if (result == null)
+            {
+                return BadRequest(new { message = "Something wrong happened in the server" });
+            }
+
+            return Ok(new { message = "Work order registered succesfully" });
         }
     }
 }

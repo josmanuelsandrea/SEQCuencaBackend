@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ScaneqCuencaBackend.DBModels;
+using ScaneqCuencaBackend.Models.RequestModels;
 using ScaneqCuencaBackend.Models.ResponseModels;
 using ScaneqCuencaBackend.Repository;
 
@@ -9,10 +10,12 @@ namespace ScaneqCuencaBackend.Bll
     {
         private readonly BusOrdersRepository _busOrderR;
         private readonly CustomerBll _customerB;
+        private readonly IMapper _mapper;
         public BusOrderBll(SeqcuencabackendContext db, IMapper mapper)
         {
             _busOrderR = new BusOrdersRepository(db);
             _customerB = new CustomerBll(db, mapper);
+            _mapper = mapper;
         }
 
         public WorkOrderResponseModel getWorkOrderById(int id)
@@ -55,6 +58,12 @@ namespace ScaneqCuencaBackend.Bll
             }
 
             return response;
+        }
+
+        public BusOrder createWorkOrder(WorkOrderRequestModel model)
+        {
+            var mapModel = _mapper.Map<BusOrder>(model);
+            return _busOrderR.createWorkOrder(mapModel);
         }
     }
 }
