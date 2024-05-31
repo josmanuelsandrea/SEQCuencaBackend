@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using ScaneqCuencaBackend.DBModels;
 using ScaneqCuencaBackend.Models.RequestModels;
 
@@ -11,9 +12,9 @@ namespace ScaneqCuencaBackend.Repository
         {
             _db = db;
         }
-        public BusOrder getWorkOrderByNumber(int id)
+        public BusOrder? getWorkOrderByNumber(int id)
         {
-            return _db.BusOrders.Where(x => x.Fid == id).First();
+            return _db.BusOrders.Where(x => x.Fid == id).Include(bo => bo.Customer).FirstOrDefault();
         }
 
         public List<BusOrder> getAllWorkOrdersByCustomerId(int id)

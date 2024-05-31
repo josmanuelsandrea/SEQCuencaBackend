@@ -13,8 +13,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<SeqcuencabackendContext>(options => options.UseNpgsql((new ConfigurationBuilder()).AddJsonFile("appsettings.json").Build().GetSection("DB").GetValue<string>("connection")));
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-builder.Services.AddScoped<BusOrdersRepository>();
-builder.Services.AddScoped<TruckOrdersRepository>();
 
 
 var app = builder.Build();
