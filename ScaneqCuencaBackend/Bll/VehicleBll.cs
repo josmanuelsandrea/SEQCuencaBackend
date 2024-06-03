@@ -72,5 +72,10 @@ namespace ScaneqCuencaBackend.Bll
         {
             return _VehicleRepository.createVehicle(model);
         }
+
+        public Vehicle? EditVehicle(Vehicle data)
+        {
+            return _VehicleRepository.EditVehicle(data);
+        }
     }
 }

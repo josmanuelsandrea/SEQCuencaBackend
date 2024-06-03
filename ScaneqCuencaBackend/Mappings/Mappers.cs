@@ -11,6 +11,7 @@ namespace ScaneqCuencaBackend.Mappings
             CreateMap<VehicleCreateRequest, Vehicle>();
             CreateMap<WorkOrderRequestModel, BusOrder>();
             CreateMap<WorkOrderRequestModel, TruckOrder>();
+            CreateMap<VehicleEditRequest, Vehicle>();
             // Add other mappings here
         }
     }

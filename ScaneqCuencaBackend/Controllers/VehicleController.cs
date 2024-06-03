@@ -34,5 +34,19 @@ namespace ScaneqCuencaBackend.Controllers
         {
             return _vehicleB.createVehicle(data, _mapper);
         }
+
+        [HttpPut]
+        public IActionResult EditVehicle([FromBody] VehicleEditRequest data)
+        {
+            var mapResult = _mapper.Map<Vehicle>(data);
+            var result = _vehicleB.EditVehicle(mapResult);
+
+            if (result == null)
+            {
+                return BadRequest(new { message = "An error ocurred when trying to edit the vehicle" });
+            }
+
+            return Ok(new { message = "Edited vehicle succesfully" });
+        }
     }
 }
