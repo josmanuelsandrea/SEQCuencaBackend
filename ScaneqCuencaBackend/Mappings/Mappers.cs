@@ -23,6 +23,10 @@ namespace ScaneqCuencaBackend.Mappings
             CreateMap<VehicleCreateRequest, Vehicle>();
             CreateMap<VehicleEditRequest, Vehicle>();
             CreateMap<Vehicle, VehicleResponse>();
+
+            // Customer mapping models
+            CreateMap<Customer, CustomerResponse>();
+
             // Add other mappings here
         }
     }

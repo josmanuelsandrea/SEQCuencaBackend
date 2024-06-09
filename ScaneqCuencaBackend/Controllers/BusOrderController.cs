@@ -22,8 +22,14 @@ namespace ScaneqCuencaBackend.Controllers
             _mapper = mapper;
             _busOrderB = new BusOrderBll(db, mapper);
         }
+        [HttpGet]
+        public List<WorkOrderResponseModel> GetWorkOrders()
+        {
+            return _busOrderB.GetAll();
+        }
+
         [HttpGet("customer/{id}")]
-        public dynamic GetWorkOrderByCustomerId(int id)
+        public List<WorkOrderResponseModel> GetWorkOrderByCustomerId(int id)
         {
             return _busOrderB.getAllWorkOrdersByCustomerId(id);
         }
