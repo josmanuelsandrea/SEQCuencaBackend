@@ -41,12 +41,12 @@ namespace ScaneqCuencaBackend.Repository
         public Vehicle? EditVehicle(Vehicle model)
         {
             var foundVehicle = _db.Vehicles.FirstOrDefault(vehicle => vehicle.Id == model.Id);
-            var customerId = foundVehicle.CustomerId;
             if (foundVehicle == null)
             {
                 return null;
             }
 
+            var customerId = foundVehicle.CustomerId;
             _db.Entry(foundVehicle).CurrentValues.SetValues(model);
             foundVehicle.CustomerId = customerId;
             _db.SaveChanges();

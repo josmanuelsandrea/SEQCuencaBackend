@@ -19,6 +19,7 @@ namespace ScaneqCuencaBackend.Controllers
         public BusOrderController(SeqcuencabackendContext db, IMapper mapper)
         {
             _db = db;
+            _mapper = mapper;
             _busOrderB = new BusOrderBll(db, mapper);
         }
         [HttpGet("customer/{id}")]
@@ -44,6 +45,17 @@ namespace ScaneqCuencaBackend.Controllers
             }
 
             return Ok(new { message = "Work order registered succesfully" });
+        }
+
+        [HttpPut]
+        public IActionResult Put([FromBody] WorkOrderEditRequestModel data)
+        {
+            var result = _busOrderB.EditWorkOrder(data);
+            if (result == null)
+            {
+                return BadRequest(new { message = "Something wrong happened in the server" });
+            }
+            return Ok(new { message = "Work order was edited succesfully" });
         }
     }
 }

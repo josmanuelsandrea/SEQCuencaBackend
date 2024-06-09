@@ -1,6 +1,4 @@
-﻿using ScaneqCuencaBackend.DBModels;
-
-namespace ScaneqCuencaBackend.Models.ResponseModels
+﻿namespace ScaneqCuencaBackend.Models.ResponseModels
 {
     public class WorkOrderResponseModel
     {
@@ -13,5 +11,13 @@ namespace ScaneqCuencaBackend.Models.ResponseModels
         public int Kilometers { get; set; }
         public bool Isarchived { get; set; }
         public int Storedvolume { get; set; }
+        public VehicleResponse? Vehicle {  get; set; }
+    }
+
+    public class VehicleResponse
+    {
+        public int Id { get; set; }
+        public string Plate { get; set; } = null!;
+        public string? Type { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace ScaneqCuencaBackend.Repository
 
         public List<BusOrder> getWorkOrderByVehicleId(int id)
         {
-            return _db.BusOrders.Where(x => x.VehicleId == id).ToList();
+            return _db.BusOrders.Where(x => x.VehicleId == id).Include(bo => bo.Vehicle).ToList();
         }
 
         public BusOrder createWorkOrder(BusOrder model)
@@ -32,6 +32,30 @@ namespace ScaneqCuencaBackend.Repository
             _db.BusOrders.Add(model);
             _db.SaveChanges();
             return model;
+        }
+
+        public BusOrder? EditWorkOrder(WorkOrderEditRequestModel model)
+        {
+            var foundWorkOrder = _db.BusOrders.FirstOrDefault(busr => busr.Fid == model.Fid);
+            if (foundWorkOrder == null)
+            {
+                return null;
+            }
+
+            // Guardar el CustomerId actual para preservarlo
+            var customerId = foundWorkOrder.CustomerId;
+
+            // Actualizar las propiedades de foundWorkOrder con los valores del modelo proporcionado
+            _db.Entry(foundWorkOrder).CurrentValues.SetValues(model);
+
+            // Restaurar el CustomerId después de la actualización
+            foundWorkOrder.CustomerId = customerId;
+
+            // Guardar los cambios en la base de datos
+            _db.SaveChanges();
+
+            // Retornar la orden de trabajo actualizada
+            return foundWorkOrder;
         }
     }
 }

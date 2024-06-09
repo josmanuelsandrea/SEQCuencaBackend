@@ -65,5 +65,10 @@ namespace ScaneqCuencaBackend.Bll
             var mapModel = _mapper.Map<BusOrder>(model);
             return _busOrderR.createWorkOrder(mapModel);
         }
+
+        public BusOrder? EditWorkOrder(WorkOrderEditRequestModel model)
+        {
+            return _busOrderR.EditWorkOrder(model);
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ScaneqCuencaBackend.DBModels;
 using ScaneqCuencaBackend.Models.RequestModels;
+using ScaneqCuencaBackend.Models.ResponseModels;
 
 namespace ScaneqCuencaBackend.Mappings
 {
@@ -8,10 +9,20 @@ namespace ScaneqCuencaBackend.Mappings
     {
         public MappingProfile()
         {
-            CreateMap<VehicleCreateRequest, Vehicle>();
+            // Work orders mapping models
             CreateMap<WorkOrderRequestModel, BusOrder>();
+            CreateMap<WorkOrderEditRequestModel, BusOrder>();
+            CreateMap<BusOrder, WorkOrderResponseModel>();
+
+
             CreateMap<WorkOrderRequestModel, TruckOrder>();
+            CreateMap<WorkOrderEditRequestModel, TruckOrder>();
+            CreateMap<TruckOrder, WorkOrderResponseModel>();
+
+            // Vehicle mapping models
+            CreateMap<VehicleCreateRequest, Vehicle>();
             CreateMap<VehicleEditRequest, Vehicle>();
+            CreateMap<Vehicle, VehicleResponse>();
             // Add other mappings here
         }
     }
