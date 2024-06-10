@@ -48,9 +48,22 @@ namespace ScaneqCuencaBackend.Bll
             return _busOrderR.createWorkOrder(mapModel);
         }
 
+        public List<WorkOrderResponseModel> GetWorkOrdersByFid(WorkOrderRange range)
+        {
+            var results = _busOrderR.GetOrdersByFidRange(range);
+            var response = _mapper.Map<List<WorkOrderResponseModel>>(results);
+
+            return response;
+        }
+
         public BusOrder? EditWorkOrder(WorkOrderEditRequestModel model)
         {
             return _busOrderR.EditWorkOrder(model);
+        }
+
+        public BusOrder? DeleteWorkOrder(int id)
+        {
+            return _busOrderR.DeleteWorkOrder(id);
         }
     }
 }

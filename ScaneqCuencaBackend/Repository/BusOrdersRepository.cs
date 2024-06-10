@@ -21,6 +21,15 @@ namespace ScaneqCuencaBackend.Repository
                 .ToList();
         }
 
+        public List<BusOrder> GetOrdersByFidRange(WorkOrderRange range)
+        {
+            return _db.BusOrders
+                .Where(entity => entity.Fid >= range.StartRangeNumber && entity.Fid <= range.EndRangeNumber)
+                .Include(entity => entity.Customer)
+                .ThenInclude(entity => entity.Vehicles)
+                .ToList();
+        }
+
         public BusOrder? getWorkOrderByNumber(int id)
         {
             return _db.BusOrders
@@ -68,6 +77,20 @@ namespace ScaneqCuencaBackend.Repository
 
             // Retornar la orden de trabajo actualizada
             return foundWorkOrder;
+        }
+
+        public BusOrder? DeleteWorkOrder(int id)
+        {
+            var result = _db.BusOrders.FirstOrDefault(entity => entity.Fid == id);
+
+            if (result == null)
+            {
+                return null;
+            }
+
+            _db.BusOrders.Remove(result);
+            _db.SaveChanges();
+            return result;
         }
     }
 }

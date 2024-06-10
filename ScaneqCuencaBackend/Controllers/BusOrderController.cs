@@ -52,6 +52,12 @@ namespace ScaneqCuencaBackend.Controllers
 
             return Ok(new { message = "Work order registered succesfully" });
         }
+        [HttpPost("range")]
+        public List<WorkOrderResponseModel> GetWorkOrdersByRangeNumber([FromBody] WorkOrderRange range)
+        {
+            var results = _busOrderB.GetWorkOrdersByFid(range);
+            return results;
+        }
 
         [HttpPut]
         public IActionResult Put([FromBody] WorkOrderEditRequestModel data)
@@ -62,6 +68,19 @@ namespace ScaneqCuencaBackend.Controllers
                 return BadRequest(new { message = "Something wrong happened in the server" });
             }
             return Ok(new { message = "Work order was edited succesfully" });
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var result = _busOrderB.DeleteWorkOrder(id);
+
+            if (result == null)
+            {
+                return BadRequest(new { message = "Something wrong happened in the server " });
+            }
+
+            return Ok(new { message = "Work order " + id + " was deleted succesfully" });
         }
     }
 }
