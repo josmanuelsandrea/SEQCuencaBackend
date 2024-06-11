@@ -59,6 +59,13 @@ namespace ScaneqCuencaBackend.Controllers
             return results;
         }
 
+        [HttpPost("dates")]
+        public List<WorkOrderResponseModel> GetWorkOrdersByRangeNumber([FromBody] WorkOrderDate range)
+        {
+            var results = _busOrderB.GetWorkOrdersByDateRange(range);
+            return results;
+        }
+
         [HttpPut]
         public IActionResult Put([FromBody] WorkOrderEditRequestModel data)
         {

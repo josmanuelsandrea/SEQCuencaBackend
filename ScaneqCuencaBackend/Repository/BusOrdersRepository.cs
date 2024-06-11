@@ -21,6 +21,15 @@ namespace ScaneqCuencaBackend.Repository
                 .ToList();
         }
 
+        public List<BusOrder> GetOrdersByDateRange(WorkOrderDate dates)
+        {
+            return _db.BusOrders
+                .Where(entity => entity.DateField >= dates.startDate && entity.DateField <= dates.endDate)
+                .Include(bo => bo.Vehicle)
+                .ThenInclude(bo => bo.Customer)
+                .ToList();
+        }
+
         public List<BusOrder> GetOrdersByFidRange(WorkOrderRange range)
         {
             return _db.BusOrders

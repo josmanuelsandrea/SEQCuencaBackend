@@ -56,6 +56,14 @@ namespace ScaneqCuencaBackend.Bll
             return response;
         }
 
+        public List<WorkOrderResponseModel> GetWorkOrdersByDateRange(WorkOrderDate dates)
+        {
+            var results = _busOrderR.GetOrdersByDateRange(dates);
+            var response = _mapper.Map<List<WorkOrderResponseModel>>(results);
+
+            return response;
+        }
+
         public BusOrder? EditWorkOrder(WorkOrderEditRequestModel model)
         {
             return _busOrderR.EditWorkOrder(model);
