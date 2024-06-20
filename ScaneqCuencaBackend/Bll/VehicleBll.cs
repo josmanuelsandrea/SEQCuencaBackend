@@ -27,14 +27,14 @@ namespace ScaneqCuencaBackend.Bll
         {
             if (type == "Bus")
             {
-                List<BusOrder> result = _BusOrderR.getWorkOrderByVehicleId(id);
+                List<BusOrder> result = _BusOrderR.GetWorkOrderByVehicleId(id);
                 var response = _mapper.Map<List<WorkOrderResponseModel>>(result);
 
                 return response;
             }
             else
             {
-                List<TruckOrder> result = _TruckOrdersR.getWorkOrderByVehicleId(id);
+                List<TruckOrder> result = _TruckOrdersR.GetWorkOrderByVehicleId(id);
                 var response = _mapper.Map<List<WorkOrderResponseModel>>(result);
 
                 return response;

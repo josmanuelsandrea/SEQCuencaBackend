@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ScaneqCuencaBackend.Bll;
 using ScaneqCuencaBackend.DBModels;
+using ScaneqCuencaBackend.Interfaces;
 using ScaneqCuencaBackend.Models.RequestModels;
 using ScaneqCuencaBackend.Models.ResponseModels;
 
@@ -11,7 +12,7 @@ namespace ScaneqCuencaBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BusOrderController : ControllerBase
+    public class BusOrderController : ControllerBase, IOrderController
     {
         private readonly SeqcuencabackendContext _db;
         private readonly BusOrderBll _busOrderB;
@@ -31,20 +32,20 @@ namespace ScaneqCuencaBackend.Controllers
         [HttpGet("customer/{id}")]
         public List<WorkOrderResponseModel> GetWorkOrderByCustomerId(int id)
         {
-            return _busOrderB.getAllWorkOrdersByCustomerId(id);
+            return _busOrderB.GetAllWorkOrdersByCustomerId(id);
         }
 
         // GET: api/<BusOrderController>
         [HttpGet("{id}")]
         public WorkOrderResponseModel Get(int id)
         {
-            return _busOrderB.getWorkOrderById(id);
+            return _busOrderB.GetWorkOrderById(id);
         }
 
         [HttpPost]
         public IActionResult Post([FromBody] WorkOrderRequestModel data)
         {
-            var result = _busOrderB.createWorkOrder(data);
+            var result = _busOrderB.CreateWorkOrder(data);
             if (result == null)
             {
                 return BadRequest(new { message = "Something wrong happened in the server" });

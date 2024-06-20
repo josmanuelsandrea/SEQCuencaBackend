@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ScaneqCuencaBackend.DBModels;
+using ScaneqCuencaBackend.Interfaces;
 using ScaneqCuencaBackend.Models.RequestModels;
 
 namespace ScaneqCuencaBackend.Repository
 {
-    public class BusOrdersRepository
+    public class BusOrdersRepository : IOrderRepository<BusOrder>
     {
         private readonly SeqcuencabackendContext _db;
         public BusOrdersRepository(SeqcuencabackendContext db)
@@ -39,7 +40,7 @@ namespace ScaneqCuencaBackend.Repository
                 .ToList();
         }
 
-        public BusOrder? getWorkOrderByNumber(int id)
+        public BusOrder? GetWorkOrderByNumber(int id)
         {
             return _db.BusOrders
                 .Where(x => x.Fid == id)
@@ -47,17 +48,17 @@ namespace ScaneqCuencaBackend.Repository
                 .FirstOrDefault();
         }
 
-        public List<BusOrder> getAllWorkOrdersByCustomerId(int id)
+        public List<BusOrder> GetAllWorkOrdersByCustomerId(int id)
         {
             return _db.BusOrders.Where(x => x.CustomerId == id).ToList();
         }
 
-        public List<BusOrder> getWorkOrderByVehicleId(int id)
+        public List<BusOrder> GetWorkOrderByVehicleId(int id)
         {
             return _db.BusOrders.Where(x => x.VehicleId == id).Include(bo => bo.Vehicle).ToList();
         }
 
-        public BusOrder createWorkOrder(BusOrder model)
+        public BusOrder CreateWorkOrder(BusOrder model)
         {
             _db.BusOrders.Add(model);
             _db.SaveChanges();

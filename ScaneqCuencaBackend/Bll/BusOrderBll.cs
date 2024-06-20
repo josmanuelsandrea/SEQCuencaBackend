@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using ScaneqCuencaBackend.DBModels;
+using ScaneqCuencaBackend.Interfaces;
 using ScaneqCuencaBackend.Models.RequestModels;
 using ScaneqCuencaBackend.Models.ResponseModels;
 using ScaneqCuencaBackend.Repository;
 
 namespace ScaneqCuencaBackend.Bll
 {
-    public class BusOrderBll
+    public class BusOrderBll : IOrderBll<BusOrder>
     {
         private readonly BusOrdersRepository _busOrderR;
         private readonly CustomerBll _customerB;
@@ -26,26 +27,26 @@ namespace ScaneqCuencaBackend.Bll
             return mappingResult;
         }
 
-        public WorkOrderResponseModel getWorkOrderById(int id)
+        public WorkOrderResponseModel GetWorkOrderById(int id)
         {
-            BusOrder workOrderFound = _busOrderR.getWorkOrderByNumber(id);
+            BusOrder? workOrderFound = _busOrderR.GetWorkOrderByNumber(id);
             var mappingResult = _mapper.Map<WorkOrderResponseModel>(workOrderFound);
 
             return mappingResult;
         }
 
-        public List<WorkOrderResponseModel> getAllWorkOrdersByCustomerId(int customerId)
+        public List<WorkOrderResponseModel> GetAllWorkOrdersByCustomerId(int customerId)
         {
-            List<BusOrder> result = _busOrderR.getAllWorkOrdersByCustomerId(customerId);
+            List<BusOrder> result = _busOrderR.GetAllWorkOrdersByCustomerId(customerId);
             var response = _mapper.Map<List<WorkOrderResponseModel>>(result);
 
             return response;
         }
 
-        public BusOrder createWorkOrder(WorkOrderRequestModel model)
+        public BusOrder CreateWorkOrder(WorkOrderRequestModel model)
         {
             var mapModel = _mapper.Map<BusOrder>(model);
-            return _busOrderR.createWorkOrder(mapModel);
+            return _busOrderR.CreateWorkOrder(mapModel);
         }
 
         public List<WorkOrderResponseModel> GetWorkOrdersByFid(WorkOrderRange range)
