@@ -1,4 +1,7 @@
-﻿namespace ScaneqCuencaBackend.DBModels;
+﻿using System;
+using System.Collections.Generic;
+
+namespace ScaneqCuencaBackend.DBModels;
 
 public partial class Customer
 {

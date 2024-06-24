@@ -82,6 +82,19 @@ CREATE TABLE IF NOT EXISTS public.mechanics_orders
     ON DELETE NO ACTION
 );
 
+CREATE TABLE IF NOT EXISTS public.notices
+(
+    id SERIAL NOT NULL PRIMARY KEY,
+    vehicle_id integer NOT NULL,
+    notice_date date NOT NULL,
+    description VARCHAR(2000),
+    severity character varying(50),
+    resolved boolean NOT NULL DEFAULT FALSE,
+    FOREIGN KEY (vehicle_id) REFERENCES vehicle(id)
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+);
+
 INSERT INTO public.vehicle(
 	id, model, vin, color, engine, year, gearbox, axle_gear, rear_axle_gear_ratio, plate, type)
 	VALUES (DEFAULT, 'generic', 'generic', 'generic', 'generic', 2000, 'generic', 'generic', null, 'generic', 'generic');

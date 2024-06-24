@@ -1,13 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace ScaneqCuencaBackend.DBModels;
 
 public partial class SeqcuencabackendContext : DbContext
 {
-    public SeqcuencabackendContext()
-    {
-    }
-
     public SeqcuencabackendContext(DbContextOptions<SeqcuencabackendContext> options)
         : base(options)
     {
@@ -20,6 +18,8 @@ public partial class SeqcuencabackendContext : DbContext
     public virtual DbSet<Mechanic> Mechanics { get; set; }
 
     public virtual DbSet<MechanicsOrder> MechanicsOrders { get; set; }
+
+    public virtual DbSet<Notice> Notices { get; set; }
 
     public virtual DbSet<TruckOrder> TruckOrders { get; set; }
 
@@ -101,6 +101,31 @@ public partial class SeqcuencabackendContext : DbContext
                 .HasForeignKey(d => d.MechanicId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("mechanics_orders_mechanic_id_fkey");
+        });
+
+        modelBuilder.Entity<Notice>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("notices_pkey");
+
+            entity.ToTable("notices");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Description)
+                .HasMaxLength(2000)
+                .HasColumnName("description");
+            entity.Property(e => e.NoticeDate).HasColumnName("notice_date");
+            entity.Property(e => e.Resolved)
+                .HasDefaultValue(false)
+                .HasColumnName("resolved");
+            entity.Property(e => e.Severity)
+                .HasMaxLength(50)
+                .HasColumnName("severity");
+            entity.Property(e => e.VehicleId).HasColumnName("vehicle_id");
+
+            entity.HasOne(d => d.Vehicle).WithMany(p => p.Notices)
+                .HasForeignKey(d => d.VehicleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("notices_vehicle_id_fkey");
         });
 
         modelBuilder.Entity<TruckOrder>(entity =>
