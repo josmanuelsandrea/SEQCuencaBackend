@@ -55,7 +55,7 @@ namespace ScaneqCuencaBackend.Repository
 
         public List<BusOrder> GetWorkOrderByVehicleId(int id)
         {
-            return _db.BusOrders.Where(x => x.VehicleId == id).Include(bo => bo.Vehicle).ToList();
+            return _db.BusOrders.Where(x => x.VehicleId == id).Include(bo => bo.Vehicle).ThenInclude(bo => bo.Customer).ToList();
         }
 
         public BusOrder CreateWorkOrder(BusOrder model)

@@ -27,6 +27,9 @@ namespace ScaneqCuencaBackend.Mappings
             // Customer mapping models
             CreateMap<Customer, CustomerResponse>();
 
+            // Notice mapping models
+            CreateMap<NoticeCreateRequest, Notice>();
+            CreateMap<Notice, NoticeResponseModel>();
             // Add other mappings here
         }
     }

@@ -11,7 +11,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<SeqcuencabackendContext>(options => options.UseNpgsql((new ConfigurationBuilder()).AddJsonFile("appsettings.json").Build().GetSection("DB").GetValue<string>("connection")));
+builder.Services.AddDbContext<SeqcuencabackendContext>(options => options.UseNpgsql((new ConfigurationBuilder()).AddJsonFile("appsettings.json").Build().GetSection("DB").GetValue<string>("connection_dev")));
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
