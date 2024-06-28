@@ -26,6 +26,7 @@ namespace ScaneqCuencaBackend.Repository
             try
             {
                 _db.Notices.Add(entity);
+                _db.SaveChanges();
                 return entity;
             } catch (Exception)
             {
