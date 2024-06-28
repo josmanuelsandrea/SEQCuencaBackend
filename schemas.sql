@@ -82,6 +82,10 @@ CREATE TABLE IF NOT EXISTS public.mechanics_orders
     ON DELETE NO ACTION
 );
 
+
+-- 24-06-27 UPDATE, YOU NEED TO ADD THIS SQL SCRIPT TO YOUR DATABASE TO MAKE IT WORK. IF YOU'RE STARTING THE DB WITHOUT DATA IGNORE THIS MESSAGE
+
+------------ 24-06-27 UPDATE STARTS HERE ----------
 CREATE TABLE IF NOT EXISTS public.notices
 (
     id SERIAL NOT NULL PRIMARY KEY,
@@ -94,6 +98,7 @@ CREATE TABLE IF NOT EXISTS public.notices
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
 );
+------------ 24-06-27 UPDATE ENDS HERE ----------
 
 INSERT INTO public.vehicle(
 	id, model, vin, color, engine, year, gearbox, axle_gear, rear_axle_gear_ratio, plate, type)
