@@ -57,7 +57,22 @@ namespace ScaneqCuencaBackend.Controllers
                 return BadRequest(new { message = "An error ocurred while saving the notice" });
             }
 
-            return Ok(new { message = "Saved notice"});
+            return Ok(new { message = "Saved notice" });
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Edit([FromBody] NoticeUpdateRequest model, int id)
+        {
+            var mapping = _mapper.Map<Notice>(model);
+            mapping.Id = id;
+            var result = _noticeB.Update(mapping);
+
+            if (result == null)
+            {
+                return BadRequest(new { message = "There was an error updating the notice. Are your this notice actually exists?" });
+            }
+
+            return Ok(new { message = "Notice updated succesfully" });
         }
     }
 }

@@ -30,6 +30,7 @@ namespace ScaneqCuencaBackend.Mappings
             // Notice mapping models
             CreateMap<NoticeCreateRequest, Notice>();
             CreateMap<Notice, NoticeResponseModel>();
+            CreateMap<NoticeUpdateRequest, Notice>();
             // Add other mappings here
         }
     }

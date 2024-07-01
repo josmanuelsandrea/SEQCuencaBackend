@@ -34,12 +34,31 @@ namespace ScaneqCuencaBackend.Repository
             }
         }
 
-        public IActionResult Update(Notice entity)
+        public Notice? Update(Notice model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var foundNotice = _db.Notices.Where(entity => entity.Id == model.Id).FirstOrDefault();
+                if (foundNotice == null)
+                {
+                    return null;
+                }
+
+                var vehicleId = foundNotice.VehicleId;
+                var date = foundNotice.NoticeDate;
+                _db.Entry(foundNotice).CurrentValues.SetValues(model);
+                foundNotice.VehicleId = vehicleId;
+                foundNotice.NoticeDate = date;
+                _db.SaveChanges();
+
+                return foundNotice;
+            } catch (Exception)
+            {
+                return null;
+            }
         }
 
-        public IActionResult Delete(Guid id)
+        public Notice? Delete(Guid id)
         {
             throw new NotImplementedException();
         }

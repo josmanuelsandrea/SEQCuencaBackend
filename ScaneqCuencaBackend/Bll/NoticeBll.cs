@@ -26,7 +26,9 @@ namespace ScaneqCuencaBackend.Bll
 
         public List<Notice> GetNoticesByVehicleId(int vehicleId)
         {
-            var notices = _repository.GetAll().Where(entity => entity.VehicleId == vehicleId).ToList();
+            var notices = _repository.GetAll()
+                .Where(entity => entity.VehicleId == vehicleId)
+                .ToList();
             return notices;
         }
 
@@ -34,6 +36,11 @@ namespace ScaneqCuencaBackend.Bll
         {
             entity.Resolved = false;
             return _repository.Add(entity);
+        }
+
+        public Notice? Update(Notice entity)
+        {
+            return _repository.Update(entity);
         }
     }
 }

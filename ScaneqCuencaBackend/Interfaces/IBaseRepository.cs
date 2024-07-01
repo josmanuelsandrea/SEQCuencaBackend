@@ -8,7 +8,7 @@ namespace ScaneqCuencaBackend.Interfaces
 
         TEntity? GetById(int id);
         TEntity? Add(TEntity entity);
-        IActionResult Update(TEntity entity);
-        IActionResult Delete(Guid id);
+        TEntity? Update(TEntity entity);
+        TEntity? Delete(Guid id);
     }
 }
