@@ -22,6 +22,15 @@ namespace ScaneqCuencaBackend.Repository
                 .ToList();
         }
 
+        public async Task<List<BusOrder>> GetOrdersAsync()
+        {
+            return await _db.BusOrders
+                .Include(bo => bo.Vehicle)
+                .ThenInclude(bo => bo.Customer)
+                .OrderBy(entity => entity.Fid)
+                .ToListAsync();
+        }
+
         public List<BusOrder> GetOrdersByDateRange(WorkOrderDate dates)
         {
             return _db.BusOrders
