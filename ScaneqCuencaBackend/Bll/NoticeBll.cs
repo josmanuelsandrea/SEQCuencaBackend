@@ -32,6 +32,13 @@ namespace ScaneqCuencaBackend.Bll
             return notices;
         }
 
+        public async Task<List<Notice>> GetNoticesByVehicleIdAsync(int vehicleId)
+        {
+            var notices = await _repository.GetAllAsync();
+            var result = notices.Where(entity => entity.VehicleId == vehicleId).ToList();
+            return result;
+        }
+
         public Notice? Add(Notice entity)
         {
             entity.Resolved = false;

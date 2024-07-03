@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ScaneqCuencaBackend.DBModels;
 using ScaneqCuencaBackend.Interfaces;
 
@@ -14,6 +15,11 @@ namespace ScaneqCuencaBackend.Repository
         public List<Notice> GetAll()
         {
             return _db.Notices.ToList();
+        }
+
+        public Task<List<Notice>> GetAllAsync()
+        {
+            return _db.Notices.ToListAsync();
         }
 
         public Notice? GetById(int id)

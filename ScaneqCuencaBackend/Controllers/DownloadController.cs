@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
+using ScaneqCuencaBackend.Bll;
 using ScaneqCuencaBackend.DBModels;
 using ScaneqCuencaBackend.Repository;
 
@@ -13,14 +14,16 @@ namespace ScaneqCuencaBackend.Controllers
     {
         private readonly SeqcuencabackendContext _db;
         private readonly BusOrdersRepository _BusOrderR;
+        private readonly NoticeBll _NoticeB;
         public DownloadController(SeqcuencabackendContext db)
         {
             _db = db;
             _BusOrderR = new BusOrdersRepository(db);
+            _NoticeB = new NoticeBll(db);
         }
         // GET: api/<ValuesController>
         [HttpGet("BusOrders")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> DownloadWorkOrders()
         {
             var data = await _BusOrderR.GetOrdersAsync();
 
@@ -57,6 +60,74 @@ namespace ScaneqCuencaBackend.Controllers
                     worksheet.Cell(i + 2, 6).Value = kilometers;
                     worksheet.Cell(i + 2, 7).Value = isWarranty;
                     worksheet.Cell(i + 2, 8).Value = storedVolume;
+                }
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    stream.Position = 0;
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Data.xlsx");
+                }
+            }
+        }
+        [HttpGet("VehicleReport/{id}")]
+        public async Task<IActionResult> DownloadVehicleOrders(int id)
+        {
+            var data = await _BusOrderR.GetWorkOrderByVehicleIdAsync(id);
+            var alertsData = await _NoticeB.GetNoticesByVehicleIdAsync(id);
+
+            if (data.Count == 0)
+            {
+                return BadRequest(new { message = "No work orders were found"});
+            }
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("WorkOrders");
+                var worksheet2 = workbook.Worksheets.Add("Alerts");
+
+                worksheet.Cell(1, 1).Value = "Fid";
+                worksheet.Cell(1, 2).Value = "Customer";
+                worksheet.Cell(1, 3).Value = "Vehicle";
+                worksheet.Cell(1, 4).Value = "DateField";
+                worksheet.Cell(1, 5).Value = "Description";
+                worksheet.Cell(1, 6).Value = "Kilometers";
+                worksheet.Cell(1, 7).Value = "Iswarranty";
+                worksheet.Cell(1, 8).Value = "Storedvolume";
+
+                worksheet2.Cell(1, 1).Value = "NoticeDate";
+                worksheet2.Cell(1, 2).Value = "Description";
+                worksheet2.Cell(1, 3).Value = "Severity";
+                worksheet2.Cell(1, 4).Value = "Resolved";
+
+                for (int i = 0; i < data.Count; i++)
+                {
+                    var order = data[i];
+                    var fid = order.Fid;
+                    var customerName = order.Customer?.Name ?? "unknown";
+                    var vehicle = order.Vehicle?.Plate ?? "generic";
+                    var dateField = order.DateField.ToString() ?? "No Date";
+                    var description = order.Description ?? "No Description";
+                    var kilometers = order.Kilometers;
+                    var isWarranty = order.Iswarranty;
+                    var storedVolume = order.Storedvolume;
+
+                    worksheet.Cell(i + 2, 1).Value = fid;
+                    worksheet.Cell(i + 2, 2).Value = customerName;
+                    worksheet.Cell(i + 2, 3).Value = vehicle;
+                    worksheet.Cell(i + 2, 4).Value = dateField;
+                    worksheet.Cell(i + 2, 5).Value = description;
+                    worksheet.Cell(i + 2, 6).Value = kilometers;
+                    worksheet.Cell(i + 2, 7).Value = isWarranty;
+                    worksheet.Cell(i + 2, 8).Value = storedVolume;
+                }
+
+                for (int i = 0; i < alertsData.Count; i++)
+                {
+                    worksheet2.Cell(i + 2, 1).Value = alertsData[i].NoticeDate.ToString();
+                    worksheet2.Cell(i + 2, 2).Value = alertsData[i].Description;
+                    worksheet2.Cell(i + 2, 3).Value = alertsData[i].Severity;
+                    worksheet2.Cell(i + 2, 4).Value = alertsData[i].Resolved;
                 }
 
                 using (var stream = new MemoryStream())
