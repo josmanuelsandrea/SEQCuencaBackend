@@ -38,7 +38,7 @@ namespace ScaneqCuencaBackend.Controllers
 
         // GET: api/<BusOrderController>
         [HttpGet("{id}")]
-        public WorkOrderResponseModel Get(int id)
+        public WorkOrderResponseModel GetOrderById(int id)
         {
             return _truckOrderB.GetWorkOrderById(id);
         }

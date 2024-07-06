@@ -35,6 +35,14 @@ namespace ScaneqCuencaBackend.Bll
             return mappingResult;
         }
 
+        public List<WorkOrderResponseModel> GetWarrantyOrders()
+        {
+            List<BusOrder> workOrderFound = _busOrderR.GetOrders().Where(entity => entity.Iswarranty == true).ToList();
+            var response = _mapper.Map<List<WorkOrderResponseModel>>(workOrderFound);
+
+            return response;
+        }
+
         public List<WorkOrderResponseModel> GetAllWorkOrdersByCustomerId(int customerId)
         {
             List<BusOrder> result = _busOrderR.GetAllWorkOrdersByCustomerId(customerId);

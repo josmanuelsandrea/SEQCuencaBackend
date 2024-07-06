@@ -7,7 +7,7 @@ namespace ScaneqCuencaBackend.Interfaces
     public interface IOrderController
     {
         IActionResult Delete(int id);
-        WorkOrderResponseModel Get(int id);
+        WorkOrderResponseModel GetOrderById(int id);
         List<WorkOrderResponseModel> GetWorkOrderByCustomerId(int id);
         List<WorkOrderResponseModel> GetWorkOrders();
         List<WorkOrderResponseModel> GetWorkOrdersByRangeNumber([FromBody] WorkOrderDate range);

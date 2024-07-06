@@ -1,7 +1,6 @@
 using ScaneqCuencaBackend.DBModels;
 using Microsoft.EntityFrameworkCore;
 using ScaneqCuencaBackend.Mappings;
-using ScaneqCuencaBackend.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 

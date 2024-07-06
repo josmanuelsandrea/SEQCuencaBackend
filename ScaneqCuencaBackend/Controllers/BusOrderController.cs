@@ -29,6 +29,12 @@ namespace ScaneqCuencaBackend.Controllers
             return _busOrderB.GetAll();
         }
 
+        [HttpGet("warranty")]
+        public List<WorkOrderResponseModel> GetWarrantyOrders()
+        {
+            return _busOrderB.GetWarrantyOrders();
+        }
+
         [HttpGet("customer/{id}")]
         public List<WorkOrderResponseModel> GetWorkOrderByCustomerId(int id)
         {
@@ -37,7 +43,7 @@ namespace ScaneqCuencaBackend.Controllers
 
         // GET: api/<BusOrderController>
         [HttpGet("{id}")]
-        public WorkOrderResponseModel Get(int id)
+        public WorkOrderResponseModel GetOrderById(int id)
         {
             return _busOrderB.GetWorkOrderById(id);
         }
