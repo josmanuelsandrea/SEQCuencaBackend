@@ -21,13 +21,6 @@ namespace ScaneqCuencaBackend.Bll
             _VehicleRepository = new VehicleRepository(_db, mapper);
         }
 
-        public List<WorkOrderResponseModel> getWorkOrderByVehicleId(int id, string type)
-        {
-            List<BusOrder> result = _BusOrderR.GetOrderByVehicleId(id);
-            var response = _mapper.Map<List<WorkOrderResponseModel>>(result);
-
-            return response;
-        }
         public Vehicle createVehicle(VehicleCreateRequest model, IMapper mapper)
         {
             return _VehicleRepository.createVehicle(model);

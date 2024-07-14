@@ -10,6 +10,7 @@ namespace ScaneqCuencaBackend.Interfaces
         T? DeleteWorkOrder(int id);
         T? EditWorkOrder(WorkOrderEditRequestModel model);
         List<WorkOrderResponseModel> GetAllWorkOrdersByCustomerId(int customerId);
+        List<WorkOrderResponseModel> GetWorkOrderByVehicleId(int id);
         WorkOrderResponseModel GetWorkOrderById(int id);
 
         // By type functions

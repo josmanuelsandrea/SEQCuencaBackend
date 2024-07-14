@@ -43,6 +43,14 @@ namespace ScaneqCuencaBackend.Bll
             return response;
         }
 
+        public List<WorkOrderResponseModel> GetWorkOrderByVehicleId(int id)
+        {
+            List<BusOrder> result = _busOrderR.GetOrderByVehicleId(id);
+            var response = _mapper.Map<List<WorkOrderResponseModel>>(result);
+
+            return response;
+        }
+
         public List<WorkOrderResponseModel> GetAllWorkOrdersByCustomerId(int customerId)
         {
             List<BusOrder> result = _busOrderR.GetAllWorkOrdersByCustomerId(customerId);
@@ -54,6 +62,7 @@ namespace ScaneqCuencaBackend.Bll
         public BusOrder CreateWorkOrder(WorkOrderRequestModel model)
         {
             var mapModel = _mapper.Map<BusOrder>(model);
+            mapModel.VehicleType = mapModel.VehicleType!.ToLower();
             return _busOrderR.CreateWorkOrder(mapModel);
         }
 

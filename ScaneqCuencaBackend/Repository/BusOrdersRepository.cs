@@ -92,13 +92,15 @@ namespace ScaneqCuencaBackend.Repository
 
         public BusOrder CreateWorkOrder(BusOrder model)
         {
-            if (model.VehicleType != "bus" || model.VehicleType != "truck")
+            if (model.VehicleType == "bus" || model.VehicleType == "truck")
+            {
+                _db.BusOrders.Add(model);
+                _db.SaveChanges();
+                return model;
+            } else
             {
                 throw new Exception("Cannot use a different vehicle type rather than bus or truck");
             }
-            _db.BusOrders.Add(model);
-            _db.SaveChanges();
-            return model;
         }
 
         public BusOrder? EditWorkOrder(WorkOrderEditRequestModel model)

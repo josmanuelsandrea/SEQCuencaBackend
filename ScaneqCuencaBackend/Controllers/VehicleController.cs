@@ -23,11 +23,6 @@ namespace ScaneqCuencaBackend.Controllers
             _vehicleB = new VehicleBll(_db, mapper);
             _mapper = mapper;
         }
-        [HttpPost("{id}")]
-        public List<WorkOrderResponseModel> GetVehicles(int id, [FromBody] VehicleTypeRequest data)
-        {
-            return _vehicleB.getWorkOrderByVehicleId(id, data.type);
-        }
 
         [HttpPost]
         public Vehicle? CreateVehicle([FromBody] VehicleCreateRequest data)

@@ -7,7 +7,6 @@ using ScaneqCuencaBackend.Models.RequestModels;
 using ScaneqCuencaBackend.Models.ResponseModels;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace ScaneqCuencaBackend.Controllers
 {
     [Route("api/WorkOrders")]
@@ -38,6 +37,11 @@ namespace ScaneqCuencaBackend.Controllers
         {
             return _busOrderB.GetWarrantyOrders();
         }
+        [HttpGet("vehicle/{id}")]
+        public List<WorkOrderResponseModel> GetWorkOrderByVehicleId(int id)
+        {
+            return _busOrderB.GetWorkOrderByVehicleId(id);
+        }
 
         [HttpGet("customer/{id}")]
         public List<WorkOrderResponseModel> GetWorkOrderByCustomerId(int id)
@@ -61,7 +65,7 @@ namespace ScaneqCuencaBackend.Controllers
                 return BadRequest(new { message = "Something wrong happened in the server" });
             }
 
-            return Ok(new { message = "Work order registered succesfully" });
+            return Ok(new { message = "Work order registered succesfully" }) ;
         }
         [HttpPost("range")]
         public List<WorkOrderResponseModel> GetWorkOrdersByRangeNumber([FromQuery] string vehicleType, [FromBody] WorkOrderRange range)
