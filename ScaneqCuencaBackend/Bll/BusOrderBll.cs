@@ -19,9 +19,9 @@ namespace ScaneqCuencaBackend.Bll
             _mapper = mapper;
         }
 
-        public List<WorkOrderResponseModel> GetAll()
+        public List<WorkOrderResponseModel> GetOrders(string vehicleType)
         {
-            var response = _busOrderR.GetOrders();
+            var response = _busOrderR.GetOrders(vehicleType);
             var mappingResult = _mapper.Map<List<WorkOrderResponseModel>>(response);
 
             return mappingResult;
@@ -37,7 +37,7 @@ namespace ScaneqCuencaBackend.Bll
 
         public List<WorkOrderResponseModel> GetWarrantyOrders()
         {
-            List<BusOrder> workOrderFound = _busOrderR.GetOrders().Where(entity => entity.Iswarranty == true).ToList();
+            List<BusOrder> workOrderFound = _busOrderR.GetAllOrders().Where(entity => entity.Iswarranty == true).ToList();
             var response = _mapper.Map<List<WorkOrderResponseModel>>(workOrderFound);
 
             return response;
@@ -57,17 +57,17 @@ namespace ScaneqCuencaBackend.Bll
             return _busOrderR.CreateWorkOrder(mapModel);
         }
 
-        public List<WorkOrderResponseModel> GetWorkOrdersByFid(WorkOrderRange range)
+        public List<WorkOrderResponseModel> GetWorkOrdersByFid(string vehicleType, WorkOrderRange range)
         {
-            var results = _busOrderR.GetOrdersByFidRange(range);
+            var results = _busOrderR.GetBusOrdersByFidRange(vehicleType, range);
             var response = _mapper.Map<List<WorkOrderResponseModel>>(results);
 
             return response;
         }
 
-        public List<WorkOrderResponseModel> GetWorkOrdersByDateRange(WorkOrderDate dates)
+        public List<WorkOrderResponseModel> GetWorkOrdersByDateRange(string vehicleType, WorkOrderDate dates)
         {
-            var results = _busOrderR.GetOrdersByDateRange(dates);
+            var results = _busOrderR.GetBusOrdersByDateRange(vehicleType, dates);
             var response = _mapper.Map<List<WorkOrderResponseModel>>(results);
 
             return response;

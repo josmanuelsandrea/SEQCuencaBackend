@@ -13,13 +13,41 @@ namespace ScaneqCuencaBackend.Repository
         {
             _db = db;
         }
-
-        public List<BusOrder> GetOrders()
+        
+        // Bus functions
+        public List<BusOrder> GetOrders(string vehicleType)
         {
             return _db.BusOrders
                 .Include(bo => bo.Vehicle)
                 .ThenInclude(bo => bo.Customer)
+                .Where(bo => bo.VehicleType == vehicleType)
                 .ToList();
+        }
+
+        public List<BusOrder> GetBusOrdersByDateRange(string vehicleType, WorkOrderDate dates)
+        {
+            return _db.BusOrders
+                .Where(entity => entity.DateField >= dates.startDate && entity.DateField <= dates.endDate)
+                .Where(entity => entity.VehicleType == vehicleType)
+                .Include(bo => bo.Vehicle)
+                .ThenInclude(bo => bo.Customer)
+                .ToList();
+        }
+
+        public List<BusOrder> GetBusOrdersByFidRange(string vehicleType, WorkOrderRange range)
+        {
+            return _db.BusOrders
+                .Where(entity => entity.Fid >= range.StartRangeNumber && entity.Fid <= range.EndRangeNumber)
+                .Where(entity => entity.VehicleType == vehicleType)
+                .Include(entity => entity.Customer)
+                .ThenInclude(entity => entity.Vehicles)
+                .ToList();
+        }
+
+        // General functions
+        public List<BusOrder> GetAllOrders()
+        {
+            return _db.BusOrders.ToList();
         }
 
         public async Task<List<BusOrder>> GetOrdersAsync()
@@ -29,24 +57,6 @@ namespace ScaneqCuencaBackend.Repository
                 .ThenInclude(bo => bo.Customer)
                 .OrderBy(entity => entity.Fid)
                 .ToListAsync();
-        }
-
-        public List<BusOrder> GetOrdersByDateRange(WorkOrderDate dates)
-        {
-            return _db.BusOrders
-                .Where(entity => entity.DateField >= dates.startDate && entity.DateField <= dates.endDate)
-                .Include(bo => bo.Vehicle)
-                .ThenInclude(bo => bo.Customer)
-                .ToList();
-        }
-
-        public List<BusOrder> GetOrdersByFidRange(WorkOrderRange range)
-        {
-            return _db.BusOrders
-                .Where(entity => entity.Fid >= range.StartRangeNumber && entity.Fid <= range.EndRangeNumber)
-                .Include(entity => entity.Customer)
-                .ThenInclude(entity => entity.Vehicles)
-                .ToList();
         }
 
         public BusOrder? GetWorkOrderByNumber(int id)
@@ -62,7 +72,7 @@ namespace ScaneqCuencaBackend.Repository
             return _db.BusOrders.Where(x => x.CustomerId == id).ToList();
         }
 
-        public List<BusOrder> GetWorkOrderByVehicleId(int id)
+        public List<BusOrder> GetOrderByVehicleId(int id)
         {
             return _db.BusOrders
                 .Where(x => x.VehicleId == id)
@@ -82,6 +92,10 @@ namespace ScaneqCuencaBackend.Repository
 
         public BusOrder CreateWorkOrder(BusOrder model)
         {
+            if (model.VehicleType != "bus" || model.VehicleType != "truck")
+            {
+                throw new Exception("Cannot use a different vehicle type rather than bus or truck");
+            }
             _db.BusOrders.Add(model);
             _db.SaveChanges();
             return model;

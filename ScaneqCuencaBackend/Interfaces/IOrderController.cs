@@ -9,9 +9,9 @@ namespace ScaneqCuencaBackend.Interfaces
         IActionResult Delete(int id);
         WorkOrderResponseModel GetOrderById(int id);
         List<WorkOrderResponseModel> GetWorkOrderByCustomerId(int id);
-        List<WorkOrderResponseModel> GetWorkOrders();
-        List<WorkOrderResponseModel> GetWorkOrdersByRangeNumber([FromBody] WorkOrderDate range);
-        List<WorkOrderResponseModel> GetWorkOrdersByRangeNumber([FromBody] WorkOrderRange range);
+        List<WorkOrderResponseModel> GetWorkOrders([FromQuery] string vehicleType);
+        List<WorkOrderResponseModel> GetWorkOrdersByRangeNumber([FromQuery] string vehicleType, [FromBody] WorkOrderDate range);
+        List<WorkOrderResponseModel> GetWorkOrdersByRangeNumber([FromQuery] string vehicleType, [FromBody] WorkOrderRange range);
         IActionResult Post([FromBody] WorkOrderRequestModel data);
         IActionResult Put([FromBody] WorkOrderEditRequestModel data);
     }

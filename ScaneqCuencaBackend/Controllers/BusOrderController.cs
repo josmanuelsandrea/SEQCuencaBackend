@@ -10,7 +10,7 @@ using ScaneqCuencaBackend.Models.ResponseModels;
 
 namespace ScaneqCuencaBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/WorkOrders")]
     [ApiController]
     public class BusOrderController : ControllerBase, IOrderController
     {
@@ -24,9 +24,13 @@ namespace ScaneqCuencaBackend.Controllers
             _busOrderB = new BusOrderBll(db, mapper);
         }
         [HttpGet]
-        public List<WorkOrderResponseModel> GetWorkOrders()
+        public List<WorkOrderResponseModel> GetWorkOrders([FromQuery] string vehicleType)
         {
-            return _busOrderB.GetAll();
+            if (vehicleType == null)
+            {
+                return new List<WorkOrderResponseModel>();
+            }
+            return _busOrderB.GetOrders(vehicleType);
         }
 
         [HttpGet("warranty")]
@@ -60,16 +64,24 @@ namespace ScaneqCuencaBackend.Controllers
             return Ok(new { message = "Work order registered succesfully" });
         }
         [HttpPost("range")]
-        public List<WorkOrderResponseModel> GetWorkOrdersByRangeNumber([FromBody] WorkOrderRange range)
+        public List<WorkOrderResponseModel> GetWorkOrdersByRangeNumber([FromQuery] string vehicleType, [FromBody] WorkOrderRange range)
         {
-            var results = _busOrderB.GetWorkOrdersByFid(range);
+            if (vehicleType == null)
+            {
+                return new List<WorkOrderResponseModel>();
+            }
+            var results = _busOrderB.GetWorkOrdersByFid(vehicleType, range);
             return results;
         }
 
         [HttpPost("dates")]
-        public List<WorkOrderResponseModel> GetWorkOrdersByRangeNumber([FromBody] WorkOrderDate range)
+        public List<WorkOrderResponseModel> GetWorkOrdersByRangeNumber([FromQuery] string vehicleType, [FromBody] WorkOrderDate range)
         {
-            var results = _busOrderB.GetWorkOrdersByDateRange(range);
+            if (vehicleType == null)
+            {
+                return new List<WorkOrderResponseModel>();
+            }
+            var results = _busOrderB.GetWorkOrdersByDateRange(vehicleType, range);
             return results;
         }
 

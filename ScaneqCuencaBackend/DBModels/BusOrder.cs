@@ -25,7 +25,11 @@ public partial class BusOrder
 
     public int? VehicleId { get; set; }
 
+    public string? VehicleType { get; set; }
+
     public virtual Customer Customer { get; set; } = null!;
+
+    public virtual ICollection<MaintenanceRegistry> MaintenanceRegistries { get; set; } = new List<MaintenanceRegistry>();
 
     public virtual Vehicle? Vehicle { get; set; }
 }
