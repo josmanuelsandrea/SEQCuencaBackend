@@ -82,6 +82,9 @@ CREATE TABLE IF NOT EXISTS public.mechanics_orders
     ON DELETE NO ACTION
 );
 
+INSERT INTO public.vehicle(
+	id, model, vin, color, engine, year, gearbox, axle_gear, rear_axle_gear_ratio, plate, type)
+	VALUES (DEFAULT, 'generic', 'generic', 'generic', 'generic', 2000, 'generic', 'generic', null, 'generic', 'generic');
 
 -- 24-06-27 UPDATE, YOU NEED TO ADD THIS SQL SCRIPT TO YOUR DATABASE TO MAKE IT WORK. IF YOU'RE STARTING THE DB WITHOUT DATA IGNORE THIS MESSAGE
 
@@ -100,6 +103,29 @@ CREATE TABLE IF NOT EXISTS public.notices
 );
 ------------ 24-06-27 UPDATE ENDS HERE ----------
 
-INSERT INTO public.vehicle(
-	id, model, vin, color, engine, year, gearbox, axle_gear, rear_axle_gear_ratio, plate, type)
-	VALUES (DEFAULT, 'generic', 'generic', 'generic', 'generic', 2000, 'generic', 'generic', null, 'generic', 'generic');
+----------- 24-07-14 UPDATE STARTS HERE ----------
+
+CREATE TABLE IF NOT EXISTS public.maintenance_registry
+(
+    id SERIAL NOT NULL PRIMARY KEY,
+    vehicle_fk_id integer NOT NULL,
+    order_fk_id integer NOT NULL,
+    maintenance_date date NOT NULL,
+    maintenance_type VARCHAR(20) NOT NULL,
+    FOREIGN KEY (vehicle_fk_id) REFERENCES vehicle(id)
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION,
+    FOREIGN KEY (order_fk_id) REFERENCES bus_orders(id)
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+);
+
+-- ADD COLUMN TO bus_orders TABLE
+ALTER TABLE public.bus_orders
+ADD COLUMN vehicle_type character varying(255) default 'bus';
+
+-- REMOVE CONSTRAINT FROM bus_orders TABLE
+ALTER TABLE public.bus_orders
+DROP CONSTRAINT bus_orders_fid_key;
+
+----------- 24-07-14 UPDATE ENDS HERE ----------
