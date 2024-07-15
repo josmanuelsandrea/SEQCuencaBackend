@@ -111,7 +111,9 @@ CREATE TABLE IF NOT EXISTS public.maintenance_registry
     vehicle_fk_id integer NOT NULL,
     order_fk_id integer NOT NULL,
     maintenance_date date NOT NULL,
-    maintenance_type VARCHAR(20) NOT NULL,
+    maintenance_type VARCHAR(50) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    kilometers integer NOT NULL,
     FOREIGN KEY (vehicle_fk_id) REFERENCES vehicle(id)
     ON UPDATE NO ACTION
     ON DELETE NO ACTION,

@@ -15,6 +15,10 @@ public partial class MaintenanceRegistry
 
     public string MaintenanceType { get; set; } = null!;
 
+    public string? Description { get; set; }
+
+    public int Kilometers { get; set; }
+
     public virtual BusOrder OrderFk { get; set; } = null!;
 
     public virtual Vehicle VehicleFk { get; set; } = null!;

@@ -12,5 +12,6 @@
         public int Storedvolume { get; set; }
         public int? VehicleId { get; set; }
         public string? VehicleType { get; set; }
+        public required List<MaintenanceRegistryRequest> maintenances { get; set; }
     }
 }

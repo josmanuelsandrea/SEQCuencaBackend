@@ -68,5 +68,10 @@ namespace ScaneqCuencaBackend.Repository
         {
             throw new NotImplementedException();
         }
+
+        public List<Notice> AddMultiple(List<Notice> entities)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

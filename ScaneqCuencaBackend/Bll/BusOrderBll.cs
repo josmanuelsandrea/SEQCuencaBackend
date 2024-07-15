@@ -11,12 +11,16 @@ namespace ScaneqCuencaBackend.Bll
     {
         private readonly BusOrdersRepository _busOrderR;
         private readonly CustomerBll _customerB;
+        private readonly MaintenanceRegistryRepository _maintenanceRegistriesR;
+        private readonly SeqcuencabackendContext _db;
         private readonly IMapper _mapper;
         public BusOrderBll(SeqcuencabackendContext db, IMapper mapper)
         {
             _busOrderR = new BusOrdersRepository(db);
             _customerB = new CustomerBll(db, mapper);
+            _maintenanceRegistriesR = new MaintenanceRegistryRepository(db);
             _mapper = mapper;
+            _db = db;
         }
 
         public List<WorkOrderResponseModel> GetOrders(string vehicleType)
@@ -59,11 +63,46 @@ namespace ScaneqCuencaBackend.Bll
             return response;
         }
 
-        public BusOrder CreateWorkOrder(WorkOrderRequestModel model)
+        public BusOrder? CreateWorkOrder(WorkOrderRequestModel model)
         {
-            var mapModel = _mapper.Map<BusOrder>(model);
-            mapModel.VehicleType = mapModel.VehicleType!.ToLower();
-            return _busOrderR.CreateWorkOrder(mapModel);
+            var mapOrder = _mapper.Map<BusOrder>(model);
+            mapOrder.VehicleType = mapOrder.VehicleType!.ToLower();
+
+            var mapRegistries = _mapper.Map<List<MaintenanceRegistry>>(model.maintenances);
+
+            using (var transaction = _db.Database.BeginTransaction())
+            {
+                try
+                {
+                    var OperationResultWorkOrder = _busOrderR.CreateWorkOrder(mapOrder);
+                    if (OperationResultWorkOrder == null)
+                    {
+                        transaction.Rollback();
+                        return null;
+                    }
+
+                    mapRegistries.ForEach(registry => registry.OrderFkId = OperationResultWorkOrder.Id);
+
+                    var OperationResultMaintenanceRegistry = _maintenanceRegistriesR.AddMultiple(mapRegistries);
+                    if (OperationResultMaintenanceRegistry == null)
+                    {
+                        // Si falla la adición de registros de mantenimiento, revierte la transacción
+                        transaction.Rollback();
+                        return null;
+                    }
+
+                    // Confirma la transacción
+                    transaction.Commit();
+
+                    // Retorna la orden de trabajo creada
+                    return OperationResultWorkOrder;
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
         }
 
         public List<WorkOrderResponseModel> GetWorkOrdersByFid(string vehicleType, WorkOrderRange range)
