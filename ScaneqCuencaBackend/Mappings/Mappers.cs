@@ -29,7 +29,7 @@ namespace ScaneqCuencaBackend.Mappings
 
             // MaintenanceRegistries model
             CreateMap<MaintenanceRegistryRequest, MaintenanceRegistry>();
-
+            CreateMap<MaintenanceRegistry, MaintenanceRegistryResponse>();
             // Add other mappings here
         }
     }

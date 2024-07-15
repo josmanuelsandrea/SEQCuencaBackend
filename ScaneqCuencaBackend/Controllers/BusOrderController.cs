@@ -90,7 +90,7 @@ namespace ScaneqCuencaBackend.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody] WorkOrderEditRequestModel data)
+        public IActionResult Update([FromBody] WorkOrderEditRequestModel data)
         {
             var result = _busOrderB.EditWorkOrder(data);
             if (result == null)

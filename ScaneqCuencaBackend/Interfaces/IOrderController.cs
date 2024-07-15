@@ -14,6 +14,6 @@ namespace ScaneqCuencaBackend.Interfaces
         List<WorkOrderResponseModel> GetWorkOrdersByRangeNumber([FromQuery] string vehicleType, [FromBody] WorkOrderDate range);
         List<WorkOrderResponseModel> GetWorkOrdersByRangeNumber([FromQuery] string vehicleType, [FromBody] WorkOrderRange range);
         IActionResult Post([FromBody] WorkOrderRequestModel data);
-        IActionResult Put([FromBody] WorkOrderEditRequestModel data);
+        IActionResult Update([FromBody] WorkOrderEditRequestModel data);
     }
 }

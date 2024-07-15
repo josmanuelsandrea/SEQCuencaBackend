@@ -123,7 +123,40 @@ namespace ScaneqCuencaBackend.Bll
 
         public BusOrder? EditWorkOrder(WorkOrderEditRequestModel model)
         {
-            return _busOrderR.EditWorkOrder(model);
+            var maintenanceRegistryMapping = _mapper.Map<List<MaintenanceRegistry>>(model.maintenances);
+            var foundWorkOrder = _busOrderR.GetWorkOrderByNumber(model.Fid);
+
+            if (foundWorkOrder == null)
+            {
+                return null;
+            }
+
+            using (var transaction = _db.Database.BeginTransaction())
+            {
+                try
+                {
+                    var OperationResultOrder = _busOrderR.EditWorkOrder(model);
+                    if (OperationResultOrder == null)
+                    {
+                        transaction.Rollback();
+                        return null;
+                    }
+
+                    var OperationResultMaintenanceRegistries = _maintenanceRegistriesR.UpdateOrderRegistries(foundWorkOrder.Id, maintenanceRegistryMapping);
+                    if (OperationResultMaintenanceRegistries == null)
+                    {
+                        transaction.Rollback();
+                        return null;
+                    }
+
+                    transaction.Commit();
+                    return foundWorkOrder;
+                } catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
         }
 
         public BusOrder? DeleteWorkOrder(int id)

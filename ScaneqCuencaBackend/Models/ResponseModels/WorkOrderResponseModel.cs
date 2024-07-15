@@ -2,7 +2,7 @@
 {
     public class WorkOrderResponseModel
     {
-        public int Uid { get; set; }
+        public int Id { get; set; }
         public int Fid { get; set; }
         public DateOnly DateField { get; set; }
         public CustomerResponse? Customer { get; set; }

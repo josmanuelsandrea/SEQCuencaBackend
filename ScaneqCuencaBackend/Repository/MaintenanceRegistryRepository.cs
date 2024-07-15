@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Vml.Office;
+using Microsoft.EntityFrameworkCore;
 using ScaneqCuencaBackend.DBModels;
 using ScaneqCuencaBackend.Interfaces;
 
@@ -52,6 +53,25 @@ namespace ScaneqCuencaBackend.Repository
         public MaintenanceRegistry? Delete(Guid id)
         {
             throw new NotImplementedException();
+        }
+
+        public List<MaintenanceRegistry> UpdateOrderRegistries(int id, List<MaintenanceRegistry> registries)
+        {
+            _db.MaintenanceRegistries.Where(entity => entity.OrderFkId == id)
+                .ExecuteDelete();
+
+            if (registries.Count <= 0)
+            {
+                return null;
+            }
+
+            foreach (var registry in registries)
+            {
+                _db.MaintenanceRegistries.Add(registry);
+            }
+
+            _db.SaveChanges();
+            return registries;
         }
     }
 }

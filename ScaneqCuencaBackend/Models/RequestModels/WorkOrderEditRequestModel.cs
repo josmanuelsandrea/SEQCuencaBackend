@@ -11,5 +11,6 @@
         public bool Isarchived { get; set; }
         public int Storedvolume { get; set; }
         public int? VehicleId { get; set; }
+        public required List<MaintenanceRegistryRequest> maintenances { get; set; }
     }
 }
