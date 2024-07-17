@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using ScaneqCuencaBackend.DBModels;
 using ScaneqCuencaBackend.Interfaces;
 using ScaneqCuencaBackend.Models.RequestModels;
@@ -12,6 +14,7 @@ namespace ScaneqCuencaBackend.Bll
         private readonly BusOrdersRepository _busOrderR;
         private readonly CustomerBll _customerB;
         private readonly MaintenanceRegistryRepository _maintenanceRegistriesR;
+        private readonly MaintenanceRegistryBll _maintenanceRegistryBll;
         private readonly SeqcuencabackendContext _db;
         private readonly IMapper _mapper;
         public BusOrderBll(SeqcuencabackendContext db, IMapper mapper)
@@ -19,6 +22,7 @@ namespace ScaneqCuencaBackend.Bll
             _busOrderR = new BusOrdersRepository(db);
             _customerB = new CustomerBll(db, mapper);
             _maintenanceRegistriesR = new MaintenanceRegistryRepository(db);
+            _maintenanceRegistryBll = new MaintenanceRegistryBll(db);
             _mapper = mapper;
             _db = db;
         }
@@ -159,9 +163,26 @@ namespace ScaneqCuencaBackend.Bll
             }
         }
 
-        public BusOrder? DeleteWorkOrder(int id)
+        public int? DeleteWorkOrder(int id)
         {
-            return _busOrderR.DeleteWorkOrder(id);
+            using (var transaction = _db.Database.BeginTransaction())
+            {
+                try
+                {
+                    var orderResult = _busOrderR.DeleteWorkOrder(id);
+                    if (orderResult == null)
+                    {
+                        transaction.Rollback();
+                        return null;
+                    }
+
+                    transaction.Commit();
+                    return id;
+                } catch(Exception)
+                {
+                    transaction.Rollback(); throw;
+                }
+            }
         }
     }
 }

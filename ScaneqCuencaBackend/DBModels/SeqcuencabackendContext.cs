@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Query.Internal;
 
 namespace ScaneqCuencaBackend.DBModels;
 
 public partial class SeqcuencabackendContext : DbContext
 {
+    public SeqcuencabackendContext()
+    {
+    }
+
     public SeqcuencabackendContext(DbContextOptions<SeqcuencabackendContext> options)
         : base(options)
     {
@@ -24,6 +29,10 @@ public partial class SeqcuencabackendContext : DbContext
     public virtual DbSet<Notice> Notices { get; set; }
 
     public virtual DbSet<Vehicle> Vehicles { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseNpgsql("Host=localhost;Database=seqcuencabackend;Username=postgres;Password=admin");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -85,19 +94,17 @@ public partial class SeqcuencabackendContext : DbContext
             entity.Property(e => e.Kilometers).HasColumnName("kilometers");
             entity.Property(e => e.MaintenanceDate).HasColumnName("maintenance_date");
             entity.Property(e => e.MaintenanceType)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("maintenance_type");
             entity.Property(e => e.OrderFkId).HasColumnName("order_fk_id");
             entity.Property(e => e.VehicleFkId).HasColumnName("vehicle_fk_id");
 
             entity.HasOne(d => d.OrderFk).WithMany(p => p.MaintenanceRegistries)
                 .HasForeignKey(d => d.OrderFkId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("maintenance_registry_order_fk_id_fkey");
 
             entity.HasOne(d => d.VehicleFk).WithMany(p => p.MaintenanceRegistries)
                 .HasForeignKey(d => d.VehicleFkId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("maintenance_registry_vehicle_fk_id_fkey");
         });
 

@@ -7,7 +7,7 @@ namespace ScaneqCuencaBackend.Interfaces
     public interface IOrderBll<T> where T : class
     {
         T CreateWorkOrder(WorkOrderRequestModel model);
-        T? DeleteWorkOrder(int id);
+        int? DeleteWorkOrder(int id);
         T? EditWorkOrder(WorkOrderEditRequestModel model);
         List<WorkOrderResponseModel> GetAllWorkOrdersByCustomerId(int customerId);
         List<WorkOrderResponseModel> GetWorkOrderByVehicleId(int id);

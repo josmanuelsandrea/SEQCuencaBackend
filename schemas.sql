@@ -115,11 +115,11 @@ CREATE TABLE IF NOT EXISTS public.maintenance_registry
     description VARCHAR(255) NOT NULL,
     kilometers integer NOT NULL,
     FOREIGN KEY (vehicle_fk_id) REFERENCES vehicle(id)
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION,
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
     FOREIGN KEY (order_fk_id) REFERENCES bus_orders(id)
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
 );
 
 -- ADD COLUMN TO bus_orders TABLE
@@ -131,3 +131,25 @@ ALTER TABLE public.bus_orders
 DROP CONSTRAINT bus_orders_fid_key;
 
 ----------- 24-07-14 UPDATE ENDS HERE ----------
+
+----------- 24-07-15 UPDATE STARTS HERE ----------
+-- Eliminar las restricciones de clave externa existentes
+ALTER TABLE public.maintenance_registry
+DROP CONSTRAINT maintenance_registry_vehicle_fk_id_fkey;
+
+ALTER TABLE public.maintenance_registry
+DROP CONSTRAINT maintenance_registry_order_fk_id_fkey;
+
+-- Agregar las nuevas restricciones de clave externa con CASCADE
+ALTER TABLE public.maintenance_registry
+ADD CONSTRAINT maintenance_registry_vehicle_fk_id_fkey FOREIGN KEY (vehicle_fk_id) 
+REFERENCES vehicle(id) 
+ON UPDATE CASCADE
+ON DELETE NO ACTION;
+
+ALTER TABLE public.maintenance_registry
+ADD CONSTRAINT maintenance_registry_order_fk_id_fkey FOREIGN KEY (order_fk_id) 
+REFERENCES bus_orders(id) 
+ON UPDATE CASCADE
+ON DELETE CASCADE;
+----------- 24-07-15 UPDATE ENDS HERE ----------
