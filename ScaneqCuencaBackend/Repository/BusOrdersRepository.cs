@@ -47,7 +47,7 @@ namespace ScaneqCuencaBackend.Repository
         // General functions
         public List<BusOrder> GetAllOrders()
         {
-            return _db.BusOrders.ToList();
+            return _db.BusOrders.Include(entity => entity.Customer).ToList();
         }
 
         public async Task<List<BusOrder>> GetOrdersAsync()

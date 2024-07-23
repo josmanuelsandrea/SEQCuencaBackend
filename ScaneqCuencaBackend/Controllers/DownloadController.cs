@@ -31,14 +31,14 @@ namespace ScaneqCuencaBackend.Controllers
             {
                 var worksheet = workbook.Worksheets.Add("Sheet1");
 
-                worksheet.Cell(1, 1).Value = "Fid";
-                worksheet.Cell(1, 2).Value = "Customer";
-                worksheet.Cell(1, 3).Value = "Vehicle";
-                worksheet.Cell(1, 4).Value = "DateField";
-                worksheet.Cell(1, 5).Value = "Description";
-                worksheet.Cell(1, 6).Value = "Kilometers";
-                worksheet.Cell(1, 7).Value = "Iswarranty";
-                worksheet.Cell(1, 8).Value = "Storedvolume";
+                worksheet.Cell(1, 1).Value = "Numero de orden";
+                worksheet.Cell(1, 2).Value = "Cliente";
+                worksheet.Cell(1, 3).Value = "Placa";
+                worksheet.Cell(1, 4).Value = "Fecha";
+                worksheet.Cell(1, 5).Value = "Descripcion";
+                worksheet.Cell(1, 6).Value = "Kilometraje";
+                worksheet.Cell(1, 7).Value = "Garantia";
+                worksheet.Cell(1, 8).Value = "Volumen archivo";
 
                 for (int i = 0; i < data.Count; i++)
                 {
@@ -46,7 +46,7 @@ namespace ScaneqCuencaBackend.Controllers
                     var fid = order.Fid;
                     var customerName = order.Customer?.Name ?? "unknown";
                     var vehicle = order.Vehicle?.Plate ?? "generic";
-                    var dateField = order.DateField.ToString() ?? "No Date";
+                    var dateField = order.DateField.ToString("yyyy/MM/dd") ?? "No Date";
                     var description = order.Description ?? "No Description";
                     var kilometers = order.Kilometers;
                     var isWarranty = order.Iswarranty;
@@ -86,19 +86,19 @@ namespace ScaneqCuencaBackend.Controllers
                 var worksheet = workbook.Worksheets.Add("WorkOrders");
                 var worksheet2 = workbook.Worksheets.Add("Alerts");
 
-                worksheet.Cell(1, 1).Value = "Fid";
-                worksheet.Cell(1, 2).Value = "Customer";
-                worksheet.Cell(1, 3).Value = "Vehicle";
-                worksheet.Cell(1, 4).Value = "DateField";
-                worksheet.Cell(1, 5).Value = "Description";
-                worksheet.Cell(1, 6).Value = "Kilometers";
-                worksheet.Cell(1, 7).Value = "Iswarranty";
-                worksheet.Cell(1, 8).Value = "Storedvolume";
+                worksheet.Cell(1, 1).Value = "Numero de orden";
+                worksheet.Cell(1, 2).Value = "Cliente";
+                worksheet.Cell(1, 3).Value = "Placa";
+                worksheet.Cell(1, 4).Value = "Fecha";
+                worksheet.Cell(1, 5).Value = "Descripcion";
+                worksheet.Cell(1, 6).Value = "Kilometraje";
+                worksheet.Cell(1, 7).Value = "Garantia";
+                worksheet.Cell(1, 8).Value = "Volumen archivo";
 
-                worksheet2.Cell(1, 1).Value = "NoticeDate";
-                worksheet2.Cell(1, 2).Value = "Description";
-                worksheet2.Cell(1, 3).Value = "Severity";
-                worksheet2.Cell(1, 4).Value = "Resolved";
+                worksheet2.Cell(1, 1).Value = "Fecha";
+                worksheet2.Cell(1, 2).Value = "Descripcion";
+                worksheet2.Cell(1, 3).Value = "Gravedad";
+                worksheet2.Cell(1, 4).Value = "Resuelto";
 
                 for (int i = 0; i < data.Count; i++)
                 {
@@ -106,7 +106,7 @@ namespace ScaneqCuencaBackend.Controllers
                     var fid = order.Fid;
                     var customerName = order.Customer?.Name ?? "unknown";
                     var vehicle = order.Vehicle?.Plate ?? "generic";
-                    var dateField = order.DateField.ToString() ?? "No Date";
+                    var dateField = order.DateField.ToString("dd/MM/yyyy") ?? "No Date";
                     var description = order.Description ?? "No Description";
                     var kilometers = order.Kilometers;
                     var isWarranty = order.Iswarranty;

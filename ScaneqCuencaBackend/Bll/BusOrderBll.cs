@@ -146,11 +146,14 @@ namespace ScaneqCuencaBackend.Bll
                         return null;
                     }
 
-                    var OperationResultMaintenanceRegistries = _maintenanceRegistriesR.UpdateOrderRegistries(foundWorkOrder.Id, maintenanceRegistryMapping);
-                    if (OperationResultMaintenanceRegistries == null)
+                    if (maintenanceRegistryMapping.Count > 0)
                     {
-                        transaction.Rollback();
-                        return null;
+                        var OperationResultMaintenanceRegistries = _maintenanceRegistriesR.UpdateOrderRegistries(foundWorkOrder.Id, maintenanceRegistryMapping);
+                        if (OperationResultMaintenanceRegistries == null)
+                        {
+                            transaction.Rollback();
+                            return null;
+                        }
                     }
 
                     transaction.Commit();
