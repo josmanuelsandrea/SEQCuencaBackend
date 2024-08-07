@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ScaneqCuencaBackend.Bll;
 using ScaneqCuencaBackend.DBModels;
+using ScaneqCuencaBackend.Helpers;
 using ScaneqCuencaBackend.Interfaces;
 using ScaneqCuencaBackend.Models.RequestModels;
 using ScaneqCuencaBackend.Models.ResponseModels;
@@ -51,21 +52,42 @@ namespace ScaneqCuencaBackend.Controllers
 
         // GET: api/<BusOrderController>
         [HttpGet("{id}")]
-        public WorkOrderResponseModel GetOrderById(int id)
+        public ActionResult<GenericResponse<WorkOrderResponseModel>> GetOrderById(int id)
         {
-            return _busOrderB.GetWorkOrderById(id);
+            var result = _busOrderB.GetWorkOrderById(id);
+            var WorkOrderResponse = _mapper.Map<WorkOrderResponseModel>(result);
+            GenericResponse<WorkOrderResponseModel> response = new()
+            {
+                Code = 200,
+                Message = ResponseMessages.SUCCESS,
+                Model = WorkOrderResponse
+            };
+
+            return Ok(response);
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] WorkOrderRequestModel data)
+        public ActionResult<GenericResponse<WorkOrderResponseModel>> Post([FromBody] WorkOrderRequestModel data)
         {
             var result = _busOrderB.CreateWorkOrder(data);
+            var WorkOrderResponse = _mapper.Map<WorkOrderResponseModel>(result);
+
             if (result == null)
             {
-                return BadRequest(new { message = "Something wrong happened in the server" });
+                return BadRequest(new GenericResponse<WorkOrderResponseModel>()
+                {
+                    Code = 400,
+                    Message = ResponseMessages.UNKNOWN_ERROR,
+                    Model = WorkOrderResponse
+                });
             }
 
-            return Ok(new { message = "Work order registered succesfully" }) ;
+            return Ok(new GenericResponse<WorkOrderResponseModel>()
+            {
+                Code = 200,
+                Model = WorkOrderResponse,
+                Message = ResponseMessages.SUCCESS
+            });
         }
         [HttpPost("range")]
         public List<WorkOrderResponseModel> GetWorkOrdersByRangeNumber([FromQuery] string vehicleType, [FromBody] WorkOrderRange range)
@@ -90,27 +112,51 @@ namespace ScaneqCuencaBackend.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] WorkOrderEditRequestModel data)
+        public ActionResult<GenericResponse<WorkOrderResponseModel>> Update([FromBody] WorkOrderEditRequestModel data)
         {
             var result = _busOrderB.EditWorkOrder(data);
+            var WorkOrderResponse = _mapper.Map<WorkOrderResponseModel>(result);
+
             if (result == null)
             {
-                return BadRequest(new { message = "Something wrong happened in the server" });
+                return BadRequest(new GenericResponse<WorkOrderResponseModel>()
+                {
+                    Message = ResponseMessages.UNKNOWN_ERROR,
+                    Code = 400,
+                    Model = WorkOrderResponse
+                });
             }
-            return Ok(new { message = "Work order was edited succesfully" });
+
+            return Ok(new GenericResponse<WorkOrderResponseModel>()
+            {
+                Message = ResponseMessages.SUCCESS,
+                Code = 200,
+                Model = WorkOrderResponse
+            });
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public ActionResult<GenericResponse<WorkOrderResponseModel>> Delete(int id)
         {
             var result = _busOrderB.DeleteWorkOrder(id);
+            var WorkOrderResponse = _mapper.Map<WorkOrderResponseModel>(result);
 
             if (result == null)
             {
-                return BadRequest(new { message = "Something wrong happened in the server " });
+                return BadRequest(new GenericResponse<WorkOrderResponseModel>()
+                {
+                    Message = ResponseMessages.UNKNOWN_ERROR,
+                    Code = 400,
+                    Model = WorkOrderResponse
+                });
             }
 
-            return Ok(new { message = "Work order " + id + " was deleted succesfully" });
+            return Ok(new GenericResponse<WorkOrderResponseModel>()
+            {
+                Message = ResponseMessages.SUCCESS,
+                Code = 200,
+                Model = WorkOrderResponse
+            });
         }
     }
 }
