@@ -69,6 +69,22 @@ namespace ScaneqCuencaBackend.Bll
 
         public BusOrder? CreateWorkOrder(WorkOrderRequestModel model)
         {
+            // Check if the order by given fid already exists
+
+            var foundOrder = _db.BusOrders.Where(order => order.Fid == model.Fid).FirstOrDefault();
+            model.VehicleType = model.VehicleType!.ToLower();
+
+            if (foundOrder != null)
+            {
+                if (foundOrder.VehicleType == model.VehicleType)
+                {
+                    return null;
+                }
+
+                // If the order already exists, then return null | error
+            }
+
+
             var mapOrder = _mapper.Map<BusOrder>(model);
             mapOrder.VehicleType = mapOrder.VehicleType!.ToLower();
 

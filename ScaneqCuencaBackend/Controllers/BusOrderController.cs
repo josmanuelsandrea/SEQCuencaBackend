@@ -136,26 +136,25 @@ namespace ScaneqCuencaBackend.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<GenericResponse<WorkOrderResponseModel>> Delete(int id)
+        public ActionResult<GenericResponse<int?>> Delete(int id)
         {
             var result = _busOrderB.DeleteWorkOrder(id);
-            var WorkOrderResponse = _mapper.Map<WorkOrderResponseModel>(result);
 
             if (result == null)
             {
-                return BadRequest(new GenericResponse<WorkOrderResponseModel>()
+                return BadRequest(new GenericResponse<int?>()
                 {
                     Message = ResponseMessages.UNKNOWN_ERROR,
                     Code = 400,
-                    Model = WorkOrderResponse
+                    Model = result
                 });
             }
 
-            return Ok(new GenericResponse<WorkOrderResponseModel>()
+            return Ok(new GenericResponse<int?>()
             {
                 Message = ResponseMessages.SUCCESS,
                 Code = 200,
-                Model = WorkOrderResponse
+                Model = result
             });
         }
     }

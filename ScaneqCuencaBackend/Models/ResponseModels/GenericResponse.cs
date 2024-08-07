@@ -1,6 +1,6 @@
 ﻿namespace ScaneqCuencaBackend.Models.ResponseModels
 {
-    public class GenericResponse<T> where T : class
+    public class GenericResponse<T>
     {
         public string Message { get; set; } = "null";
         public T? Model { get; set; }

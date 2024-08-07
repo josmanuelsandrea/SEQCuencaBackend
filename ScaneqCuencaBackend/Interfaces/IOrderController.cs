@@ -15,6 +15,6 @@ namespace ScaneqCuencaBackend.Interfaces
         List<WorkOrderResponseModel> GetWorkOrdersByRangeNumber([FromQuery] string vehicleType, [FromBody] WorkOrderRange range);
         ActionResult<GenericResponse<WorkOrderResponseModel>> Post([FromBody] WorkOrderRequestModel data);
         ActionResult<GenericResponse<WorkOrderResponseModel>> Update([FromBody] WorkOrderEditRequestModel data);
-        ActionResult<GenericResponse<WorkOrderResponseModel>> Delete(int id);
+        ActionResult<GenericResponse<int?>> Delete(int id);
     }
 }
