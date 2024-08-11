@@ -15,7 +15,7 @@ namespace ScaneqCuencaBackend.Repository
 
         public List<MaintenanceRegistry> GetAll()
         {
-            return _db.MaintenanceRegistries.ToList();
+            return _db.MaintenanceRegistries.Include(wo => wo.OrderFk).ToList();
         }
         public MaintenanceRegistry? GetById(int id)
         {
@@ -72,6 +72,13 @@ namespace ScaneqCuencaBackend.Repository
 
             _db.SaveChanges();
             return registries;
+        }
+
+        public int DeleteAllRegistriesByOrderId(int id)
+        {
+            _db.MaintenanceRegistries.Where(registries => registries.OrderFkId == id).ExecuteDelete();
+            _db.SaveChanges();
+            return id;
         }
     }
 }

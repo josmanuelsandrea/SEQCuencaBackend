@@ -170,6 +170,11 @@ namespace ScaneqCuencaBackend.Bll
                             transaction.Rollback();
                             return null;
                         }
+                    } else
+                    {
+                        // If there is not registries received from the frontend, it means that the users wants to delete the registries
+                        // of that work order, so we will delete it here
+                        _maintenanceRegistriesR.DeleteAllRegistriesByOrderId(foundWorkOrder.Id);
                     }
 
                     transaction.Commit();

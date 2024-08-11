@@ -14,6 +14,11 @@ namespace ScaneqCuencaBackend.Repository
             _mapper = mapper;
         }
 
+        public List<Vehicle> GetAllVehicles()
+        {
+            return _db.Vehicles.ToList();
+        }
+
         public Vehicle getVehicleById(int id)
         {
             return _db.Vehicles.Where(x => x.Id == id).First();
