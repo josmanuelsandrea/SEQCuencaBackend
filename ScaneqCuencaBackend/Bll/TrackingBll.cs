@@ -89,7 +89,7 @@ namespace ScaneqCuencaBackend.Bll
                 // This need to be implemented later, when maintenanceRegistries registers on the DB the frequency change of the maintenances
                 // var useFulMaintenanceRegistries = allRegistries.OrderBy(mr => mr.Ki)
 
-                if (daysSinceLastOilOrder > 28)
+                if (daysSinceLastOilOrder > 26)
                 {
                     var trackingData = new TrackingDataResponse
                     {
