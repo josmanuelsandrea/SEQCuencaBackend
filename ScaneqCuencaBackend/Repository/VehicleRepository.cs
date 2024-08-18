@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using ScaneqCuencaBackend.DBModels;
 using ScaneqCuencaBackend.Models.RequestModels;
 
@@ -16,7 +17,7 @@ namespace ScaneqCuencaBackend.Repository
 
         public List<Vehicle> GetAllVehicles()
         {
-            return _db.Vehicles.ToList();
+            return _db.Vehicles.Include(v => v.Customer).ToList();
         }
 
         public Vehicle getVehicleById(int id)

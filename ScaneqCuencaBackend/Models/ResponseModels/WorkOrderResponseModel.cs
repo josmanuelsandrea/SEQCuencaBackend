@@ -19,6 +19,8 @@
         public int Id { get; set; }
         public string Plate { get; set; } = null!;
         public string? Type { get; set; }
+        public int? Kilometers { get; set; }
+        public CustomerResponse? Customer { get; set; }
     }
 
     public class CustomerResponse
