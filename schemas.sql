@@ -24,24 +24,26 @@ CREATE TABLE IF NOT EXISTS public.vehicle (
     ON DELETE NO ACTION
 );
 
-CREATE TABLE IF NOT EXISTS public.truck_orders (
-    id SERIAL NOT NULL PRIMARY KEY,
-    fid integer NOT NULL UNIQUE,
-    date_field date NOT NULL,
-    customer_id integer NOT NULL,
-    description VARCHAR(2000),
-    iswarranty boolean NOT NULL,
-    kilometers integer NOT NULL,
-    isarchived boolean NOT NULL,
-    storedvolume integer NOT NULL,
-    vehicle_id integer,
-    FOREIGN KEY (customer_id) REFERENCES customers(id)
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION,
-    FOREIGN KEY (vehicle_id) REFERENCES vehicle(id)
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION
-);
+-- This table is not used in the current version 10/09/24
+
+-- CREATE TABLE IF NOT EXISTS public.truck_orders (
+--     id SERIAL NOT NULL PRIMARY KEY,
+--     fid integer NOT NULL UNIQUE,
+--     date_field date NOT NULL,
+--     customer_id integer NOT NULL,
+--     description VARCHAR(2000),
+--     iswarranty boolean NOT NULL,
+--     kilometers integer NOT NULL,
+--     isarchived boolean NOT NULL,
+--     storedvolume integer NOT NULL,
+--     vehicle_id integer,
+--     FOREIGN KEY (customer_id) REFERENCES customers(id)
+--     ON UPDATE NO ACTION
+--     ON DELETE NO ACTION,
+--     FOREIGN KEY (vehicle_id) REFERENCES vehicle(id)
+--     ON UPDATE NO ACTION
+--     ON DELETE NO ACTION
+-- );
 
 CREATE TABLE IF NOT EXISTS public.bus_orders
 (
@@ -153,3 +155,13 @@ REFERENCES bus_orders(id)
 ON UPDATE CASCADE
 ON DELETE CASCADE;
 ----------- 24-07-15 UPDATE ENDS HERE ----------
+----------- 10-09-24 UPDATE STARTS HERE ----------
+
+ALTER TABLE public.customers
+ADD COLUMN id_ruc_number character varying(20),
+ADD COLUMN phone_number character varying(15);
+
+ALTER TABLE public.vehicle
+ADD COLUMN maintenance_agreement character varying(255);
+
+----------- 10-09-24 UPDATE ENDS HERE ----------

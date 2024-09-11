@@ -9,6 +9,10 @@ namespace ScaneqCuencaBackend.Mappings
     {
         public MappingProfile()
         {
+            // Customer response mapping models
+            CreateMap<Customer, CustomerResponseModel>();
+            CreateMap<CustomerResponseModel, Customer>();
+
             // Work orders mapping models
             CreateMap<WorkOrderRequestModel, BusOrder>();
             CreateMap<WorkOrderEditRequestModel, BusOrder>();

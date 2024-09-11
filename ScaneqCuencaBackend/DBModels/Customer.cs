@@ -9,6 +9,10 @@ public partial class Customer
 
     public string Name { get; set; } = null!;
 
+    public string? IdRucNumber { get; set; }
+
+    public string? PhoneNumber { get; set; }
+
     public virtual ICollection<BusOrder> BusOrders { get; set; } = new List<BusOrder>();
 
     public virtual ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>();

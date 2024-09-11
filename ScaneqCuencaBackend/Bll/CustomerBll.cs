@@ -16,20 +16,11 @@ namespace ScaneqCuencaBackend.Bll
             _customerR = new CustomerRepository(db);
             _vehicleR = new VehicleRepository(db, mapper);
         }
-        public List<CustomerResponseModel> getAllCustomers()
+        public List<Customer> getAllCustomers()
         {
             List<Customer> result = _customerR.getAllCustomers();
-            List<CustomerResponseModel> response = new ();
-            foreach (Customer customer in result)
-            {
-                response.Add(new CustomerResponseModel()
-                {
-                    Id = customer.Id,
-                    Name = customer.Name
-                });
-            };
 
-            return response;
+            return result;
         }
         public CustomerResponseModel getCustomerById(int id)
         {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Query.Internal;
 
 namespace ScaneqCuencaBackend.DBModels;
 
@@ -29,6 +28,7 @@ public partial class SeqcuencabackendContext : DbContext
     public virtual DbSet<Notice> Notices { get; set; }
 
     public virtual DbSet<Vehicle> Vehicles { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BusOrder>(entity =>
@@ -71,9 +71,15 @@ public partial class SeqcuencabackendContext : DbContext
             entity.ToTable("customers");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.IdRucNumber)
+                .HasMaxLength(20)
+                .HasColumnName("id_ruc_number");
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .HasColumnName("name");
+            entity.Property(e => e.PhoneNumber)
+                .HasMaxLength(15)
+                .HasColumnName("phone_number");
         });
 
         modelBuilder.Entity<MaintenanceRegistry>(entity =>
@@ -100,6 +106,7 @@ public partial class SeqcuencabackendContext : DbContext
 
             entity.HasOne(d => d.VehicleFk).WithMany(p => p.MaintenanceRegistries)
                 .HasForeignKey(d => d.VehicleFkId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("maintenance_registry_vehicle_fk_id_fkey");
         });
 
@@ -181,6 +188,9 @@ public partial class SeqcuencabackendContext : DbContext
             entity.Property(e => e.Gearbox)
                 .HasMaxLength(255)
                 .HasColumnName("gearbox");
+            entity.Property(e => e.MaintenanceAgreement)
+                .HasMaxLength(255)
+                .HasColumnName("maintenance_agreement");
             entity.Property(e => e.Model)
                 .HasMaxLength(255)
                 .HasColumnName("model");

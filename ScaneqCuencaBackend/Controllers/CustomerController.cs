@@ -24,12 +24,15 @@ namespace ScaneqCuencaBackend.Controllers
             _db = context;
             _customerB = new CustomerBll(context, mapper);
             _repository = new CustomerRepository(context);
+            _mapper = mapper;
         }
         //GET: api/<CustomerController>
         [HttpGet]
         public List<CustomerResponseModel> Get()
         {
-            return _customerB.getAllCustomers();
+            var result = _customerB.getAllCustomers();
+            var response = _mapper.Map<List<CustomerResponseModel>>(result);
+            return response;
         }
 
         [HttpGet("{id}")]
