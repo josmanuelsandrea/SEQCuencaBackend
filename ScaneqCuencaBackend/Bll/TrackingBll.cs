@@ -12,6 +12,7 @@ namespace ScaneqCuencaBackend.Bll
         private readonly VehicleRepository _vehicleRepository;
         private readonly MaintenanceRegistryBll _maintenanceRegistryB;
         private readonly BusOrderBll _busOrderB;
+        private readonly NoticeRepository _noticeR;
         private readonly IMapper _mapper;
         public TrackingBll(SeqcuencabackendContext db, IMapper mapper)
         {
@@ -20,6 +21,7 @@ namespace ScaneqCuencaBackend.Bll
             _vehicleRepository = new(db, mapper);
             _maintenanceRegistryB = new(db);
             _busOrderB = new(db, mapper);
+            _noticeR = new NoticeRepository(db);
         }
 
         public List<TrackingDataResponse> GetTrackingData()
@@ -213,6 +215,13 @@ namespace ScaneqCuencaBackend.Bll
             //    Vehicles = _mapper.Map<List<VehicleResponse>>(valid_vehicles),
             //    Percentage = percentage
             //};
+        }
+
+        public List<NoticeResponseModel> GetPendingWarnings()
+        {
+            var warnings = _noticeR.GetAll().Where(w => w.Resolved == false).ToList();
+            var response = _mapper.Map<List<NoticeResponseModel>>(warnings);
+            return response;
         }
     }
 }

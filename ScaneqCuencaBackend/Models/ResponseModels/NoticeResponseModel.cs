@@ -10,5 +10,6 @@ namespace ScaneqCuencaBackend.Models.ResponseModels
         public string? Description { get; set; }
         public string? Severity { get; set; }
         public bool Resolved { get; set; }
+        public VehicleResponse? Vehicle { get; set; }
     }
 }

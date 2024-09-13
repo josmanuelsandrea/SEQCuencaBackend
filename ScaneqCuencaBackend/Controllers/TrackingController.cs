@@ -40,5 +40,12 @@ namespace ScaneqCuencaBackend.Controllers
 
             return _trackingBll.GetVehicleKilometerRange(ranges);
         }
+
+        [HttpGet("Warnings")]
+        public List<NoticeResponseModel> GetPendingWarnings()
+        {
+            List<NoticeResponseModel> response = _trackingBll.GetPendingWarnings();
+            return response;
+        }
     }
 }
