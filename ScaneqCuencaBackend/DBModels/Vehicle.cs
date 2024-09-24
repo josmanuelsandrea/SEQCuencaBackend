@@ -33,6 +33,8 @@ public partial class Vehicle
 
     public int? CooperativeId { get; set; }
 
+    public int? FleetNumber { get; set; }
+
     public virtual ICollection<BusOrder> BusOrders { get; set; } = new List<BusOrder>();
 
     public virtual Cooperative? Cooperative { get; set; }

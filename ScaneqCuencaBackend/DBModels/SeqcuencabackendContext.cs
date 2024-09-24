@@ -73,6 +73,9 @@ public partial class SeqcuencabackendContext : DbContext
             entity.ToTable("cooperatives");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.City)
+                .HasMaxLength(255)
+                .HasColumnName("city");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
@@ -204,6 +207,7 @@ public partial class SeqcuencabackendContext : DbContext
             entity.Property(e => e.Engine)
                 .HasMaxLength(255)
                 .HasColumnName("engine");
+            entity.Property(e => e.FleetNumber).HasColumnName("fleet_number");
             entity.Property(e => e.Gearbox)
                 .HasMaxLength(255)
                 .HasColumnName("gearbox");
@@ -228,7 +232,7 @@ public partial class SeqcuencabackendContext : DbContext
             entity.HasOne(d => d.Cooperative).WithMany(p => p.Vehicles)
                 .HasForeignKey(d => d.CooperativeId)
                 .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("vehicle_cooperative_id_fkey");
+                .HasConstraintName("vehicle_cooperative_fk");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Vehicles)
                 .HasForeignKey(d => d.CustomerId)

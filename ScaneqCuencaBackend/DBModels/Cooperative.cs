@@ -11,5 +11,7 @@ public partial class Cooperative
 
     public DateTime? CreatedAt { get; set; }
 
+    public string City { get; set; } = null!;
+
     public virtual ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
 }
