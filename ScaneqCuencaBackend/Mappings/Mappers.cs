@@ -34,6 +34,10 @@ namespace ScaneqCuencaBackend.Mappings
             // MaintenanceRegistries model
             CreateMap<MaintenanceRegistryRequest, MaintenanceRegistry>();
             CreateMap<MaintenanceRegistry, MaintenanceRegistryResponse>();
+
+            // Cooperative model
+            CreateMap<CooperativeResponseModel, Cooperative>();
+            CreateMap<Cooperative, CooperativeResponseModel>();
             // Add other mappings here
         }
     }

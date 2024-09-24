@@ -17,6 +17,8 @@ public partial class SeqcuencabackendContext : DbContext
 
     public virtual DbSet<BusOrder> BusOrders { get; set; }
 
+    public virtual DbSet<Cooperative> Cooperatives { get; set; }
+
     public virtual DbSet<Customer> Customers { get; set; }
 
     public virtual DbSet<MaintenanceRegistry> MaintenanceRegistries { get; set; }
@@ -62,6 +64,22 @@ public partial class SeqcuencabackendContext : DbContext
             entity.HasOne(d => d.Vehicle).WithMany(p => p.BusOrders)
                 .HasForeignKey(d => d.VehicleId)
                 .HasConstraintName("bus_orders_vehicle_id_fkey");
+        });
+
+        modelBuilder.Entity<Cooperative>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("cooperatives_pkey");
+
+            entity.ToTable("cooperatives");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("created_at");
+            entity.Property(e => e.Name)
+                .HasMaxLength(255)
+                .HasColumnName("name");
         });
 
         modelBuilder.Entity<Customer>(entity =>
@@ -181,6 +199,7 @@ public partial class SeqcuencabackendContext : DbContext
             entity.Property(e => e.Color)
                 .HasMaxLength(255)
                 .HasColumnName("color");
+            entity.Property(e => e.CooperativeId).HasColumnName("cooperative_id");
             entity.Property(e => e.CustomerId).HasColumnName("customer_id");
             entity.Property(e => e.Engine)
                 .HasMaxLength(255)
@@ -188,9 +207,7 @@ public partial class SeqcuencabackendContext : DbContext
             entity.Property(e => e.Gearbox)
                 .HasMaxLength(255)
                 .HasColumnName("gearbox");
-            entity.Property(e => e.MaintenanceAgreement)
-                .HasMaxLength(255)
-                .HasColumnName("maintenance_agreement");
+            entity.Property(e => e.MaintenanceAgreement).HasColumnName("maintenance_agreement");
             entity.Property(e => e.Model)
                 .HasMaxLength(255)
                 .HasColumnName("model");
@@ -207,6 +224,11 @@ public partial class SeqcuencabackendContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("vin");
             entity.Property(e => e.Year).HasColumnName("year");
+
+            entity.HasOne(d => d.Cooperative).WithMany(p => p.Vehicles)
+                .HasForeignKey(d => d.CooperativeId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("vehicle_cooperative_id_fkey");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Vehicles)
                 .HasForeignKey(d => d.CustomerId)

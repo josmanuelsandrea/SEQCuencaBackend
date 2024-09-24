@@ -15,5 +15,7 @@ namespace ScaneqCuencaBackend.Models.RequestModels
         public decimal? RearAxleGearRatio { get; set; }
         public string Plate { get; set; } = null!;
         public string? Type { get; set; }
+        public bool? MaintenanceAgreement { get; set; }
+        public int? CooperativeId { get; set; }
     }
 }

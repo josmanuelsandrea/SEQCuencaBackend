@@ -17,17 +17,17 @@ namespace ScaneqCuencaBackend.Repository
 
         public List<Vehicle> GetAllVehicles()
         {
-            return _db.Vehicles.Include(v => v.Customer).ToList();
+            return _db.Vehicles.Include(v => v.Customer).Include(v => v.Cooperative).ToList();
         }
 
         public Vehicle getVehicleById(int id)
         {
-            return _db.Vehicles.Where(x => x.Id == id).First();
+            return _db.Vehicles.Where(x => x.Id == id).Include(x => x.Cooperative).First();
         }
 
         public List<Vehicle> getVehiclesByCustomerId(int id)
         {
-            return _db.Vehicles.Where(x => x.CustomerId == id).ToList();
+            return _db.Vehicles.Where(x => x.CustomerId == id).Include(x => x.Cooperative).ToList();
         }
 
         public Vehicle? createVehicle(VehicleCreateRequest model)

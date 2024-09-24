@@ -29,9 +29,13 @@ public partial class Vehicle
 
     public string? Type { get; set; }
 
-    public string? MaintenanceAgreement { get; set; }
+    public bool? MaintenanceAgreement { get; set; }
+
+    public int? CooperativeId { get; set; }
 
     public virtual ICollection<BusOrder> BusOrders { get; set; } = new List<BusOrder>();
+
+    public virtual Cooperative? Cooperative { get; set; }
 
     public virtual Customer? Customer { get; set; }
 
