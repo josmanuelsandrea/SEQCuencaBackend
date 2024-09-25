@@ -165,3 +165,33 @@ ALTER TABLE public.vehicle
 ADD COLUMN maintenance_agreement character varying(255);
 
 ----------- 10-09-24 UPDATE ENDS HERE ----------
+
+----------- 24-09-24 UPDATE STARTS HERE ----------
+
+-- Modificar la columna maintenance_agreement a boolean en la tabla Vehicle
+ALTER TABLE public.vehicle
+ALTER COLUMN maintenance_agreement TYPE boolean
+USING maintenance_agreement::boolean;
+
+-- Agregar nuevas columnas a la tabla Vehicle
+ALTER TABLE public.vehicle
+ADD COLUMN CooperativeId integer,
+ADD COLUMN fleet_number integer;
+
+-- Crear la tabla Cooperatives
+CREATE TABLE IF NOT EXISTS public.cooperatives
+(
+    id SERIAL NOT NULL PRIMARY KEY,
+    name character varying(255) NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    city character varying(255) NOT NULL
+);
+
+-- Agregar la relación de clave externa para CooperativeId en la tabla Vehicle
+ALTER TABLE public.vehicle
+ADD CONSTRAINT vehicle_cooperative_fk FOREIGN KEY (CooperativeId) 
+REFERENCES cooperatives(id)
+ON UPDATE CASCADE
+ON DELETE SET NULL;
+
+----------- 24-09-24 UPDATE ENDS HERE ----------
