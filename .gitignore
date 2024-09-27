@@ -7,6 +7,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+ScaneqCuencaBackend/appsettings.json
+ScaneqCuencaBackend/appsettings.Development.json
+
 # User-specific files
 *.rsuser
 *.suo

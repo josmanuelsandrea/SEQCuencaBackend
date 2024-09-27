@@ -55,9 +55,11 @@ namespace ScaneqCuencaBackend.Controllers
         }
 
         [HttpGet("vehicles/{id}")]
-        public List<Vehicle> GetVehicles(int id)
+        public List<VehicleResponse> GetVehicles(int id)
         {
-            return _customerB.getCustomerVehicles(id);
+            var data = _customerB.getCustomerVehicles(id);
+            var response = _mapper.Map<List<VehicleResponse>>(data);
+            return response;
         }
 
         [HttpPost]
