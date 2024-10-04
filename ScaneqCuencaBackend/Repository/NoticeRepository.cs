@@ -14,7 +14,12 @@ namespace ScaneqCuencaBackend.Repository
         }
         public List<Notice> GetAll()
         {
-            return _db.Notices.Include(n => n.Vehicle).ThenInclude(v => v.Customer).ToList();
+            return _db.Notices
+                .Include(n => n.Vehicle)
+                .ThenInclude(v => v.Customer)
+                .Include(c => c.Vehicle)
+                .ThenInclude(c => c.Cooperative)
+                .ToList();
         }
 
         public Task<List<Notice>> GetAllAsync()
