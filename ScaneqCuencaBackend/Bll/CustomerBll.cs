@@ -40,5 +40,11 @@ namespace ScaneqCuencaBackend.Bll
 
             return vehicles;
         }
+
+        public Customer UpdateCustomer(Customer model)
+        {
+            var response = _customerR.UpdateCustomer(model);
+            return response;
+        }
     }
 }

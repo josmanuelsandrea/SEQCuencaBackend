@@ -30,5 +30,11 @@ namespace ScaneqCuencaBackend.Bll
         {
             return _VehicleRepository.EditVehicle(data);
         }
+
+        public List<Vehicle> GetVehicleByCooperative(int cooperativeId)
+        {
+            var result = _VehicleRepository.GetAllVehicles().Where(vehicle => vehicle.CooperativeId == cooperativeId).ToList();
+            return result;
+        }
     }
 }

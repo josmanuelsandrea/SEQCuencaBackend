@@ -24,6 +24,14 @@ namespace ScaneqCuencaBackend.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet("cooperative/{cooperativeID}")]
+        public List<VehicleResponse> GetByCooperative(int cooperativeID)
+        {
+            var result = _vehicleB.GetVehicleByCooperative(cooperativeID);
+            var mapping = _mapper.Map<List<VehicleResponse>>(result);
+            return mapping;
+        }
+
         [HttpPost]
         public Vehicle? CreateVehicle([FromBody] VehicleCreateRequest data)
         {

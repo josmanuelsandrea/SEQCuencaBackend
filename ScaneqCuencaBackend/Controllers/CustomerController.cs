@@ -45,12 +45,7 @@ namespace ScaneqCuencaBackend.Controllers
                 return NotFound();
             }
 
-            CustomerResponseModel response = new()
-            {
-                Id = foundUser.Id,
-                Name = foundUser.Name
-            };
-
+            var response = _mapper.Map<CustomerResponseModel>(foundUser);
             return Ok(response);
         }
 
@@ -80,6 +75,20 @@ namespace ScaneqCuencaBackend.Controllers
                 response = "Customer created successfully",
                 responseCode = 200
             });
+        }
+
+        [HttpPut]
+        public IActionResult UpdateCustomer([FromBody] CustomerEditModel model)
+        {
+            var mapResult = _mapper.Map<Customer>(model);
+            var result = _customerB.UpdateCustomer(mapResult);
+
+            if (result == null)
+            {
+                return BadRequest(new { message = "An error ocurred when trying to edit the vehicle" });
+            }
+
+            return Ok(new { message = "Edited customer succesfully" });
         }
     }
 }

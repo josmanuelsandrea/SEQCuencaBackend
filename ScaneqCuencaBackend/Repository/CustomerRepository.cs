@@ -35,5 +35,26 @@ namespace ScaneqCuencaBackend.Repository
                 return null;
             }
         }
+
+        public Customer? UpdateCustomer(Customer model)
+        {
+            try
+            {
+                var foundCustomer = _db.Customers.Where(entity => entity.Id == model.Id).FirstOrDefault();
+                if (foundCustomer == null)
+                {
+                    return null;
+                }
+
+                _db.Entry(foundCustomer).CurrentValues.SetValues(model);
+                _db.SaveChanges();
+
+                return foundCustomer;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
 }
