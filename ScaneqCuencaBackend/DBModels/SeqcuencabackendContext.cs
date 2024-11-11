@@ -29,8 +29,13 @@ public partial class SeqcuencabackendContext : DbContext
 
     public virtual DbSet<Notice> Notices { get; set; }
 
-    public virtual DbSet<Vehicle> Vehicles { get; set; }
+    public virtual DbSet<SpareOrder> SpareOrders { get; set; }
 
+    public virtual DbSet<SparePart> SpareParts { get; set; }
+
+    public virtual DbSet<SpareRegister> SpareRegisters { get; set; }
+
+    public virtual DbSet<Vehicle> Vehicles { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BusOrder>(entity =>
@@ -187,6 +192,70 @@ public partial class SeqcuencabackendContext : DbContext
                 .HasForeignKey(d => d.VehicleId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("notices_vehicle_id_fkey");
+        });
+
+        modelBuilder.Entity<SpareOrder>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("spare_order_pkey");
+
+            entity.ToTable("spare_order");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.BusOrderFk).HasColumnName("bus_order_fk");
+            entity.Property(e => e.ClosedAt).HasColumnName("closed_at");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnName("created_at");
+            entity.Property(e => e.CustomerFk).HasColumnName("customer_fk");
+            entity.Property(e => e.Isclosed).HasColumnName("isclosed");
+
+            entity.HasOne(d => d.BusOrder).WithMany(p => p.SpareOrders)
+                .HasForeignKey(d => d.BusOrderFk)
+                .HasConstraintName("spare_order_bus_order_fk_fkey");
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.SpareOrders)
+                .HasForeignKey(d => d.CustomerFk)
+                .HasConstraintName("spare_order_customer_fk_fkey");
+        });
+
+        modelBuilder.Entity<SparePart>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("spare_part_pkey");
+
+            entity.ToTable("spare_part");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Code)
+                .HasMaxLength(255)
+                .HasColumnName("code");
+            entity.Property(e => e.Name)
+                .HasMaxLength(255)
+                .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<SpareRegister>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("spare_register_pkey");
+
+            entity.ToTable("spare_register");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.AddedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnName("added_at");
+            entity.Property(e => e.Quantity).HasColumnName("quantity");
+            entity.Property(e => e.SpareFk).HasColumnName("spare_fk");
+            entity.Property(e => e.SpareOrderFk).HasColumnName("spare_order_fk");
+
+            entity.HasOne(d => d.SparePart).WithMany(p => p.SpareRegisters)
+                .HasForeignKey(d => d.SpareFk)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("spare_register_spare_fk_fkey");
+
+            entity.HasOne(d => d.SpareOrderFkNavigation).WithMany(p => p.SpareRegisters)
+                .HasForeignKey(d => d.SpareOrderFk)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("spare_register_spare_order_fk_fkey");
         });
 
         modelBuilder.Entity<Vehicle>(entity =>

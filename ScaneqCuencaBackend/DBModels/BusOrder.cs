@@ -31,5 +31,7 @@ public partial class BusOrder
 
     public virtual ICollection<MaintenanceRegistry> MaintenanceRegistries { get; set; } = new List<MaintenanceRegistry>();
 
+    public virtual ICollection<SpareOrder> SpareOrders { get; set; } = new List<SpareOrder>();
+
     public virtual Vehicle? Vehicle { get; set; }
 }

@@ -15,5 +15,7 @@ public partial class Customer
 
     public virtual ICollection<BusOrder> BusOrders { get; set; } = new List<BusOrder>();
 
+    public virtual ICollection<SpareOrder> SpareOrders { get; set; } = new List<SpareOrder>();
+
     public virtual ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
 }

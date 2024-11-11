@@ -37,6 +37,14 @@ namespace ScaneqCuencaBackend.Bll
 
         public WorkOrderResponseModel GetWorkOrderById(int id)
         {
+            BusOrder? workOrderFound = _busOrderR.GetWorkOrderById(id);
+            var mappingResult = _mapper.Map<WorkOrderResponseModel>(workOrderFound);
+
+            return mappingResult;
+        }
+
+        public WorkOrderResponseModel GetWorkOrderByFid(int id)
+        {
             BusOrder? workOrderFound = _busOrderR.GetWorkOrderByNumber(id);
             var mappingResult = _mapper.Map<WorkOrderResponseModel>(workOrderFound);
 

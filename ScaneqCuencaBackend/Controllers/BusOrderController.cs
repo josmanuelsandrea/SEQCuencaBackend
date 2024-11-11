@@ -52,18 +52,12 @@ namespace ScaneqCuencaBackend.Controllers
 
         // GET: api/<BusOrderController>
         [HttpGet("{id}")]
-        public ActionResult<GenericResponse<WorkOrderResponseModel>> GetOrderById(int id)
+        public WorkOrderResponseModel GetOrderByFid(int id)
         {
-            var result = _busOrderB.GetWorkOrderById(id);
+            var result = _busOrderB.GetWorkOrderByFid(id);
             var WorkOrderResponse = _mapper.Map<WorkOrderResponseModel>(result);
-            GenericResponse<WorkOrderResponseModel> response = new()
-            {
-                Code = 200,
-                Message = ResponseMessages.SUCCESS,
-                Model = WorkOrderResponse
-            };
 
-            return Ok(response);
+            return WorkOrderResponse;
         }
 
         [HttpPost]

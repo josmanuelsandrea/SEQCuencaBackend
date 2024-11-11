@@ -39,6 +39,18 @@ namespace ScaneqCuencaBackend.Mappings
             // Cooperative model
             CreateMap<CooperativeResponseModel, Cooperative>();
             CreateMap<Cooperative, CooperativeResponseModel>();
+
+            // SpareOrder model
+            CreateMap<SpareOrderResponseModel, SpareOrder>();
+            CreateMap<SpareOrder, SpareOrderResponseModel>();
+            CreateMap<SpareOrderRequest, SpareOrder>();
+
+            CreateMap<SpareRegisterResponseModel, SpareRegisterResponseModel>();
+            CreateMap<SpareRegister, SpareRegisterResponseModel>();
+            CreateMap<SpareRegisterRequest, SpareRegister>();
+
+            CreateMap<SparePart, SparePartResponseModel>();
+            CreateMap<SparePartResponseModel, SparePart>();
             // Add other mappings here
         }
     }

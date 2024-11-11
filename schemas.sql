@@ -195,3 +195,48 @@ ON UPDATE CASCADE
 ON DELETE SET NULL;
 
 ----------- 24-09-24 UPDATE ENDS HERE ----------
+
+----------- 06-11-24 UPDATE STARTS HERE ----------
+
+-- Crear la tabla 'spare_order'
+CREATE TABLE IF NOT EXISTS public.spare_order
+(
+    id SERIAL NOT NULL PRIMARY KEY,
+    bus_order_fk integer,
+    customer_fk integer,
+    isClosed boolean NOT NULL,
+	created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    closed_at timestamp with time zone,
+    FOREIGN KEY (bus_order_fk) REFERENCES public.bus_orders(id)
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION,
+    FOREIGN KEY (customer_fk) REFERENCES public.customers(id)
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+);
+
+-- Crear la tabla 'spare_part'
+CREATE TABLE IF NOT EXISTS public.spare_part
+(
+    id SERIAL NOT NULL PRIMARY KEY,
+    code character varying(255) NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+-- Crear la tabla 'spare_register'
+CREATE TABLE IF NOT EXISTS public.spare_register
+(
+    id SERIAL NOT NULL PRIMARY KEY,
+    spare_order_fk integer NOT NULL,
+    spare_fk integer NOT NULL,
+    quantity integer NOT NULL,
+	added_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (spare_order_fk) REFERENCES public.spare_order(id)
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION,
+    FOREIGN KEY (spare_fk) REFERENCES public.spare_part(id)
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+);
+
+----------- 06-11-24 UPDATE ENDS HERE ----------

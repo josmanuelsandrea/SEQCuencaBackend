@@ -7,7 +7,7 @@ namespace ScaneqCuencaBackend.Interfaces
 {
     public interface IOrderController
     {
-        ActionResult<GenericResponse<WorkOrderResponseModel>> GetOrderById(int id);
+        WorkOrderResponseModel GetOrderByFid(int id);
         List<WorkOrderResponseModel> GetWorkOrderByCustomerId(int id);
         List<WorkOrderResponseModel> GetWorkOrders([FromQuery] string vehicleType);
         List<WorkOrderResponseModel> GetWorkOrderByVehicleId(int id);

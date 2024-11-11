@@ -67,6 +67,14 @@ namespace ScaneqCuencaBackend.Repository
                 .FirstOrDefault();
         }
 
+        public BusOrder? GetWorkOrderById(int id)
+        {
+            return _db.BusOrders
+                .Where(x => x.Id == id)
+                .Include(bo => bo.Customer)
+                .FirstOrDefault();
+        }
+
         public List<BusOrder> GetAllWorkOrdersByCustomerId(int id)
         {
             return _db.BusOrders.Where(x => x.CustomerId == id).ToList();
