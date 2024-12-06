@@ -240,3 +240,37 @@ CREATE TABLE IF NOT EXISTS public.spare_register
 );
 
 ----------- 06-11-24 UPDATE ENDS HERE ----------
+----------- 06-12-24 UPDATE STARTS HERE ----------
+
+-- Drop the current foreign key constraints
+ALTER TABLE public.spare_order DROP CONSTRAINT spare_order_bus_order_fk_fkey;
+ALTER TABLE public.spare_order DROP CONSTRAINT spare_order_customer_fk_fkey;
+ALTER TABLE public.spare_register DROP CONSTRAINT spare_register_spare_order_fk_fkey;
+ALTER TABLE public.spare_register DROP CONSTRAINT spare_register_spare_fk_fkey;
+
+-- Add the new constraints with the updated rules
+ALTER TABLE public.spare_order
+    ADD CONSTRAINT spare_order_bus_order_fk_fkey
+    FOREIGN KEY (bus_order_fk) REFERENCES public.bus_orders(id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
+
+ALTER TABLE public.spare_order
+    ADD CONSTRAINT spare_order_customer_fk_fkey
+    FOREIGN KEY (customer_fk) REFERENCES public.customers(id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
+
+ALTER TABLE public.spare_register
+    ADD CONSTRAINT spare_register_spare_order_fk_fkey
+    FOREIGN KEY (spare_order_fk) REFERENCES public.spare_order(id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
+
+ALTER TABLE public.spare_register
+    ADD CONSTRAINT spare_register_spare_fk_fkey
+    FOREIGN KEY (spare_fk) REFERENCES public.spare_part(id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
+
+----------- 06-12-24 UPDATE ENDS HERE ----------

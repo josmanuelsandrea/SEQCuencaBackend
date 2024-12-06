@@ -13,7 +13,7 @@ namespace ScaneqCuencaBackend.Repository
         }
         public List<SpareRegister> GetAll()
         {
-            return _db.SpareRegisters.Include(x => x.SpareFk).ToList();
+            return _db.SpareRegisters.Include(x => x.SparePart).ToList();
         }
 
         public SpareRegister? GetById(int id)
@@ -38,6 +38,38 @@ namespace ScaneqCuencaBackend.Repository
         public List<SpareRegister> AddMultiple(List<SpareRegister> entities)
         {
             throw new NotImplementedException();
+        }
+        public SpareRegister? SumToQuantity(int id, int quantity)
+        {
+            var foundSpareRegister = _db.SpareRegisters.Where(_ => _.Id == id).FirstOrDefault();
+            if (foundSpareRegister == null)
+            {
+                return null;
+            }
+
+            foundSpareRegister.Quantity += quantity;
+            _db.SaveChanges();
+            return foundSpareRegister;
+        }
+        public SpareRegister? SubstractToQuantity(int id, int quantity)
+        {
+            var foundSpareRegister = _db.SpareRegisters.Where(_ => _.Id == id).FirstOrDefault();
+            if (foundSpareRegister == null)
+            {
+                return null;
+            }
+            var mathResult = foundSpareRegister.Quantity - quantity;
+            if (mathResult <= 0)
+            {
+                _db.SpareRegisters.Remove(foundSpareRegister);
+                _db.SaveChanges();
+                return foundSpareRegister;
+            } else
+            {
+                foundSpareRegister.Quantity = mathResult;
+                _db.SaveChanges();
+                return foundSpareRegister;
+            }
         }
 
         public SpareRegister? Update(SpareRegister model)

@@ -128,21 +128,83 @@ namespace ScaneqCuencaBackend.Bll
 
         public SpareRegisterResponseModel? AddItemToOrder(SpareRegisterRequest spareRegisterR)
         {
+            // If 0 is received return null
             if (spareRegisterR.Quantity <= 0) { return null; }
 
             var foundSpare = _SparePartR.GetById(spareRegisterR.SpareFk);
             var foundOrder = _SpareOrderR.GetById(spareRegisterR.SpareOrderFk);
 
+            // If the sparePart was not found return null
             if (foundSpare == null) { return null; }
+
+            // If the order was not found return null
             if (foundOrder == null) { return null; }
+            // Check if the spare part was already added to the order
+            List<SpareRegister> spareRegisters = _SpareRegistryR.GetAll();
+            // Filter using Where
+            var foundSpareRegister = spareRegisters
+                .Where(spareR => spareR.SpareFk == foundSpare.Id && spareR.SpareOrderFk == foundOrder.Id)
+                .ToList();
+            
+            // No coincidence spareRegister case
+            if (!foundSpareRegister.Any())
+            {
+                var mapping = _mapper.Map<SpareRegisterRequest, SpareRegister>(spareRegisterR);
 
-            var mapping = _mapper.Map<SpareRegisterRequest, SpareRegister>(spareRegisterR);
+                var result = _SpareRegistryR.Add(mapping);
+                if (result == null) { return null; }
 
-            var result = _SpareRegistryR.Add(mapping);
-            if (result == null) { return null; }
+                var response = _mapper.Map<SpareRegister, SpareRegisterResponseModel>(result);
+                return response;
+            }
+            // Coincidence spareRegister case
+            else
+            {
+                var result = _SpareRegistryR.SumToQuantity(foundSpareRegister.First().Id, 1);
+                if (result == null) { return null; };
 
-            var response = _mapper.Map<SpareRegister, SpareRegisterResponseModel>(result);
-            return response;
+                return _mapper.Map<SpareRegister, SpareRegisterResponseModel>(result);
+            }
+        }
+
+        public SpareRegisterResponseModel? SubstractItemToOrder(SpareRegisterRequest spareRegisterR, int quantity)
+        {
+            // If 0 is received return null
+            if (spareRegisterR.Quantity <= 0) { return null; }
+
+            var foundSpare = _SparePartR.GetById(spareRegisterR.SpareFk);
+            var foundOrder = _SpareOrderR.GetById(spareRegisterR.SpareOrderFk);
+
+            // If the sparePart was not found return null
+            if (foundSpare == null) { return null; }
+
+            // If the order was not found return null
+            if (foundOrder == null) { return null; }
+            // Check if the spare part was already added to the order
+            List<SpareRegister> spareRegisters = _SpareRegistryR.GetAll();
+            var foundSpareRegister = spareRegisters
+                .Where(spareR => spareR.SpareFk == foundSpare.Id && spareR.SpareOrderFk == foundOrder.Id)
+                .ToList();
+
+            // No coincidence spareRegister case
+            if (!foundSpareRegister.Any())
+            {
+                var mapping = _mapper.Map<SpareRegisterRequest, SpareRegister>(spareRegisterR);
+
+                var result = _SpareRegistryR.Add(mapping);
+                if (result == null) { return null; }
+
+                var response = _mapper.Map<SpareRegister, SpareRegisterResponseModel>(result);
+                return response;
+            }
+            // Coincidence spareRegister case
+            else
+            {
+                var result = _SpareRegistryR.SubstractToQuantity(foundSpareRegister.First().Id, quantity);
+                if (result == null) { return null; };
+
+                return _mapper.Map<SpareRegister, SpareRegisterResponseModel>(result);
+            }
         }
     }
 }

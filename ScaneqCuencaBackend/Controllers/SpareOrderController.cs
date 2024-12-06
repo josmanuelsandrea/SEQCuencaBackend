@@ -91,5 +91,29 @@ namespace ScaneqCuencaBackend.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("substract")]
+        public IActionResult SubstractItemToOrder(SpareRegisterRequest spareRegisterRequest)
+        {
+            var result = _spareOrderB.SubstractItemToOrder(spareRegisterRequest, 1);
+            if (result == null)
+            {
+                return BadRequest(new { message = "Ha ocurrido un error al añadir el item a la lista" });
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPost("delete")]
+        public IActionResult DeleteItemToOrder(SpareRegisterRequest spareRegisterRequest)
+        {
+            var result = _spareOrderB.SubstractItemToOrder(spareRegisterRequest, 999999);
+            if (result == null)
+            {
+                return BadRequest(new { message = "Ha ocurrido un error al añadir el item a la lista" });
+            }
+
+            return Ok(result);
+        }
     }
 }
