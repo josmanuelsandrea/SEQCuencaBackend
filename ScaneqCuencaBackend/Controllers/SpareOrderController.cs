@@ -115,5 +115,17 @@ namespace ScaneqCuencaBackend.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("createSpare")]
+        public IActionResult CreateSparePart(SpareRequest spareData)
+        {
+            var result = _spareOrderB.CreateSparePart(spareData);
+            if (result == null)
+            {
+                return BadRequest(new { message = "Ha ocurrido un error al momento de crear el repuesto" });
+            }
+
+            return Ok(result);
+        }
     }
 }

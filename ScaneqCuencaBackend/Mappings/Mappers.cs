@@ -51,6 +51,7 @@ namespace ScaneqCuencaBackend.Mappings
 
             CreateMap<SparePart, SparePartResponseModel>();
             CreateMap<SparePartResponseModel, SparePart>();
+            CreateMap<SpareRequest, SparePart>();
             // Add other mappings here
         }
     }

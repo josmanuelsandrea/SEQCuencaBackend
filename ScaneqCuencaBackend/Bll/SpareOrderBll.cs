@@ -206,5 +206,20 @@ namespace ScaneqCuencaBackend.Bll
                 return _mapper.Map<SpareRegister, SpareRegisterResponseModel>(result);
             }
         }
+
+        public SparePartResponseModel? CreateSparePart(SpareRequest request)
+        {
+            // Check first is there any spare with the same code:
+            var foundSpareWithGivenCode = _SparePartR.GetByCode(request.Code);
+            if (foundSpareWithGivenCode != null) { return null; }
+
+            // Mapp result
+            var mappingRequest = _mapper.Map<SparePart>(request);
+            var result = _SparePartR.Add(mappingRequest);
+            if (result == null) { return null; }
+
+            var mappingResponse = _mapper.Map<SparePartResponseModel>(result);
+            return mappingResponse;
+        }
     }
 }
