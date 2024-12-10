@@ -1,6 +1,9 @@
 using ScaneqCuencaBackend.DBModels;
 using Microsoft.EntityFrameworkCore;
 using ScaneqCuencaBackend.Mappings;
+using ScaneqCuencaBackend.Services;
+using ScaneqCuencaBackend.Repository;
+using ScaneqCuencaBackend.Bll;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpClient();
+builder.Services.AddHttpClient<PdfService>();
+builder.Services.AddScoped<BusOrdersRepository>();
+builder.Services.AddScoped<SpareOrderBll>();
+builder.Services.AddScoped<PDFDataBll>();
+builder.Services.AddScoped<SpareOrderRepository>();
+builder.Services.AddScoped<SpareRegistryRepository>();
 
 // Get the environment (Development, Staging, Production)
 var environment = builder.Environment.EnvironmentName;

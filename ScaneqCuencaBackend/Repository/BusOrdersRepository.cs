@@ -64,6 +64,7 @@ namespace ScaneqCuencaBackend.Repository
             return _db.BusOrders
                 .Where(x => x.Fid == id)
                 .Include(bo => bo.Customer)
+                .Include(bo => bo.Vehicle)
                 .FirstOrDefault();
         }
 

@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using ScaneqCuencaBackend.Bll;
 using ScaneqCuencaBackend.DBModels;
 using ScaneqCuencaBackend.Models.RequestModels;
 using ScaneqCuencaBackend.Models.ResponseModels;
 using ScaneqCuencaBackend.Repository;
+using ScaneqCuencaBackend.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,13 +21,17 @@ namespace ScaneqCuencaBackend.Controllers
         private readonly SparePartRepository _sparePartRepository;
         private readonly SpareOrderRepository _spareOrderRepository;
         private readonly SpareOrderBll _spareOrderB;
-        public SpareOrderController(SeqcuencabackendContext db, IMapper mapper)
+        private readonly PdfService _pdfService;
+        private readonly PDFDataBll _pdfDataBll;
+        public SpareOrderController(SeqcuencabackendContext db, IMapper mapper, PdfService pdfService, PDFDataBll pdfDataBll)
         {
             _db = db;
             _mapper = mapper;
             _sparePartRepository = new(db);
             _spareOrderB = new(db, mapper);
             _spareOrderRepository = new(db);
+            _pdfService = pdfService;
+            _pdfDataBll = pdfDataBll;
         }
 
         [HttpGet("openOrders")]
@@ -67,6 +73,22 @@ namespace ScaneqCuencaBackend.Controllers
             var map = _mapper.Map<SpareOrderResponseModel>(result);
 
             return map;
+        }
+
+        [HttpGet("downloadWorkOrder")]
+        public async Task<IActionResult> DownloadWorkOrder([FromQuery] int id)
+        {
+            string url = "http://127.0.0.1:5050/generate-pdf/";
+            var POSTData = _pdfDataBll.PDFWorkOrderData(id);
+
+            if (POSTData != null)
+            {   
+                var pdfStream = await _pdfService.PostDataAsync(url, POSTData);
+                return File(pdfStream, "application/pdf", "workOrder.pdf");
+            } else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost("order")]

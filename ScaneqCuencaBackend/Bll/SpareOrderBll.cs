@@ -28,8 +28,13 @@ namespace ScaneqCuencaBackend.Bll
 
         public SpareOrderResponseModel GetSpareOrderByBusOrderId(int busOrderId)
         {
-            var orders = _SpareOrderR.GetAll().Where(order => order.BusOrderFk == busOrderId).ToList();
-            return _mapper.Map<SpareOrderResponseModel>(orders);
+            var orders = _SpareOrderR.GetAll().Where(order => order.BusOrderFk == busOrderId).ToList().First();
+            if (orders != null)
+            {
+                return _mapper.Map<SpareOrderResponseModel>(orders);
+            }
+
+            return new SpareOrderResponseModel();
         }
 
         public SpareOrderResponseModel GetSpareOrderByCustomerId(int customerId)
