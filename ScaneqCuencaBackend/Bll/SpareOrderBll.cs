@@ -26,15 +26,15 @@ namespace ScaneqCuencaBackend.Bll
             _db = db;
         }
 
-        public SpareOrderResponseModel GetSpareOrderByBusOrderId(int busOrderId)
+        public SpareOrderResponseModel? GetSpareOrderByBusOrderId(int busOrderId)
         {
-            var orders = _SpareOrderR.GetAll().Where(order => order.BusOrderFk == busOrderId).ToList().First();
+            var orders = _SpareOrderR.GetAll().Where(order => order.BusOrderFk == busOrderId).ToList().FirstOrDefault();
             if (orders != null)
             {
                 return _mapper.Map<SpareOrderResponseModel>(orders);
             }
 
-            return new SpareOrderResponseModel();
+            return null;
         }
 
         public SpareOrderResponseModel GetSpareOrderByCustomerId(int customerId)

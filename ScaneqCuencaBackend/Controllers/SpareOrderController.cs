@@ -84,7 +84,7 @@ namespace ScaneqCuencaBackend.Controllers
             if (POSTData != null)
             {   
                 var pdfStream = await _pdfService.PostDataAsync(url, POSTData);
-                return File(pdfStream, "application/pdf", "workOrder.pdf");
+                return File(pdfStream, "application/pdf", $"{POSTData.Data.WorkOrderId}.pdf");
             } else
             {
                 return BadRequest();

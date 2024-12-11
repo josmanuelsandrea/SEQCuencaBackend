@@ -22,19 +22,23 @@ namespace ScaneqCuencaBackend.Bll
 
             var SpareRegister = _spareOrderBll.GetSpareOrderByBusOrderId(workOrder.Id);
 
-            if (SpareRegister == null|| SpareRegister.SpareRegisters.Count <= 0) { return null; }
-
             List<PDFRequestModels.SpareList> spareLists = new List<PDFRequestModels.SpareList>();
-
-            foreach(var spare in SpareRegister.SpareRegisters)
+            if (SpareRegister != null)
             {
-                spareLists.Add(new PDFRequestModels.SpareList
+                if (SpareRegister.SpareRegisters.Count > 0)
                 {
-                    Code = spare.SparePart?.Code.ToString() ?? string.Empty,
-                    Description = spare.SparePart?.Name ?? string.Empty,
-                    Quantity = spare.Quantity.ToString(),
-                });
+                    foreach(var spare in SpareRegister.SpareRegisters)
+                    {
+                        spareLists.Add(new PDFRequestModels.SpareList
+                        {
+                            Code = spare.SparePart?.Code.ToString() ?? string.Empty,
+                            Description = spare.SparePart?.Name ?? string.Empty,
+                            Quantity = spare.Quantity.ToString(),
+                        });
+                    }
+                }
             }
+
 
             var response = new PDFRequestModels.PDFWorkOrderRequest {
                 Data = new PDFRequestModels.Data
