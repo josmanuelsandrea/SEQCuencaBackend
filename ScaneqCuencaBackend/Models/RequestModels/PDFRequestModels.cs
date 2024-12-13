@@ -16,6 +16,8 @@
             public string? Model { get; set; }
             public string? Chassis { get; set; }
             public string? Description { get; set; }
+            public string? Kilometers { get; set; }
+            public bool Guarantee { get; set; } = false;
             public List<SpareList>? SpareList { get; set; }
         }
 

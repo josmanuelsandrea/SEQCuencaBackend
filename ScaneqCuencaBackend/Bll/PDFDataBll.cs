@@ -50,7 +50,9 @@ namespace ScaneqCuencaBackend.Bll
                     Model = workOrder.Vehicle?.Model ?? string.Empty,
                     Plate = workOrder.Vehicle?.Plate ?? string.Empty,
                     WorkOrderId = workOrder.Fid.ToString() ?? string.Empty,
-                    SpareList = spareLists
+                    SpareList = spareLists,
+                    Kilometers = workOrder.Kilometers.ToString() ?? string.Empty,
+                    Guarantee = workOrder.Iswarranty
                 }
             };
 

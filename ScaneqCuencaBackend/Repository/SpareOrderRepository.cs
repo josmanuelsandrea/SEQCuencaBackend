@@ -27,6 +27,7 @@ namespace ScaneqCuencaBackend.Repository
             return _db.SpareOrders
                 .Where(entity => entity.Id == id)
                 .Include(x => x.BusOrder)
+                    .ThenInclude(x => x.Customer)
                 .Include(x => x.Customer)
                 .Include(entity => entity.SpareRegisters)
                     .ThenInclude(register => register.SparePart)
