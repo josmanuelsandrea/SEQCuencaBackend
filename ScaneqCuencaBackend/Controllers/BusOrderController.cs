@@ -12,6 +12,7 @@ namespace ScaneqCuencaBackend.Controllers
 {
     [Route("api/WorkOrders")]
     [ApiController]
+    // Prueba
     public class BusOrderController : ControllerBase, IOrderController
     {
         private readonly SeqcuencabackendContext _db;
