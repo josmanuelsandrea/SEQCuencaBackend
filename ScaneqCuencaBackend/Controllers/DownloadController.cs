@@ -12,14 +12,12 @@ namespace ScaneqCuencaBackend.Controllers
     [ApiController]
     public class DownloadController : ControllerBase
     {
-        private readonly SeqcuencabackendContext _db;
         private readonly BusOrdersRepository _BusOrderR;
         private readonly NoticeBll _NoticeB;
-        public DownloadController(SeqcuencabackendContext db)
+        public DownloadController(NoticeBll noticeB, BusOrdersRepository busOrderR)
         {
-            _db = db;
-            _BusOrderR = new BusOrdersRepository(db);
-            _NoticeB = new NoticeBll(db);
+            _NoticeB = noticeB;
+            _BusOrderR = busOrderR;
         }
         // GET: api/<ValuesController>
         [HttpGet("BusOrders")]

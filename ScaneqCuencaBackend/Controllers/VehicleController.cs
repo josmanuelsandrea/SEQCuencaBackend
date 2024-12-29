@@ -14,13 +14,11 @@ namespace ScaneqCuencaBackend.Controllers
     public class VehicleController : ControllerBase
     {
         private readonly VehicleBll _vehicleB;
-        private readonly SeqcuencabackendContext _db;
         private readonly IMapper _mapper;
 
-        public VehicleController(SeqcuencabackendContext db, IMapper mapper)
+        public VehicleController(VehicleBll vehicleB, IMapper mapper)
         {
-            _db = db;
-            _vehicleB = new VehicleBll(_db, mapper);
+            _vehicleB = vehicleB;
             _mapper = mapper;
         }
 
@@ -35,7 +33,7 @@ namespace ScaneqCuencaBackend.Controllers
         [HttpPost]
         public Vehicle? CreateVehicle([FromBody] VehicleCreateRequest data)
         {
-            return _vehicleB.createVehicle(data, _mapper);
+            return _vehicleB.createVehicle(data);
         }
 
         [HttpPut]

@@ -13,15 +13,11 @@ namespace ScaneqCuencaBackend.Controllers
     [ApiController]
     public class TrackingController : ControllerBase
     {
-        private readonly SeqcuencabackendContext _db;
-        private readonly IMapper _mapper;
         private readonly TrackingBll _trackingBll;
 
-        public TrackingController(SeqcuencabackendContext db, IMapper mapper)
+        public TrackingController(TrackingBll trackingBll)
         {
-            _db = db;
-            _mapper = mapper;
-            _trackingBll = new(db, mapper);
+            _trackingBll = trackingBll;
         }
         // GET: api/<TrackingController>
         [HttpGet]

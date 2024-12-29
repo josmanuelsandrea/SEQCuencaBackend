@@ -13,7 +13,7 @@ namespace ScaneqCuencaBackend.Repository
         {
             _db = db;
         }
-        
+
         // Bus functions
         public List<BusOrder> GetOrders(string vehicleType)
         {

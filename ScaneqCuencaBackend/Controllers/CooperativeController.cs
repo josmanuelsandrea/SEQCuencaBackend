@@ -12,14 +12,10 @@ namespace ScaneqCuencaBackend.Controllers
     [ApiController]
     public class CooperativeController : ControllerBase
     {
-        private readonly SeqcuencabackendContext _db;
         private readonly CooperativeBll _cooperativeB;
-        private readonly IMapper _mapper;
-        public CooperativeController(SeqcuencabackendContext context, IMapper mapper)
+        public CooperativeController(CooperativeBll cooperativeB)
         {
-            _db = context;
-            _mapper = mapper;
-            _cooperativeB = new(_db, _mapper);
+            _cooperativeB = cooperativeB;
         }
         // GET: api/<CooperativeController>
         [HttpGet]

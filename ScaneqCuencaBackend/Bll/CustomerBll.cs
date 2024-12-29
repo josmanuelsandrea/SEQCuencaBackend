@@ -10,12 +10,14 @@ namespace ScaneqCuencaBackend.Bll
         private readonly SeqcuencabackendContext _context;
         private readonly CustomerRepository _customerR;
         private readonly VehicleRepository _vehicleR;
-        public CustomerBll(SeqcuencabackendContext db, IMapper mapper)
+
+        public CustomerBll(IMapper mapper, VehicleRepository vehicleR, CustomerRepository customerR, SeqcuencabackendContext context)
         {
-            _context = db;
-            _customerR = new CustomerRepository(db);
-            _vehicleR = new VehicleRepository(db, mapper);
+            _vehicleR = vehicleR;
+            _customerR = customerR;
+            _context = context;
         }
+
         public List<Customer> getAllCustomers()
         {
             List<Customer> result = _customerR.getAllCustomers();

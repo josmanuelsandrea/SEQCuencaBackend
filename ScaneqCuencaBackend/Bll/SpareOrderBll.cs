@@ -14,16 +14,16 @@ namespace ScaneqCuencaBackend.Bll
         private readonly BusOrderBll _busOrderB;
         private readonly CustomerBll _CustomerB;
         private readonly IMapper _mapper;
-        private readonly SeqcuencabackendContext _db;
-        public SpareOrderBll(SeqcuencabackendContext db, IMapper mapper)
+       
+        public SpareOrderBll(IMapper mapper, BusOrderBll busOrderB, CustomerBll customerB, SpareOrderRepository spareOrderR, SpareRegistryRepository spareRegistryR = null, SparePartRepository sparePartR = null)
         {
-            _SpareOrderR = new(db);
-            _SpareRegistryR = new(db);
-            _SparePartR = new(db);
-            _busOrderB = new(db, mapper);
-            _CustomerB = new(db, mapper);
+
             _mapper = mapper;
-            _db = db;
+            _busOrderB = busOrderB;
+            _CustomerB = customerB;
+            _SpareOrderR = spareOrderR;
+            _SpareRegistryR = spareRegistryR;
+            _SparePartR = sparePartR;
         }
 
         public SpareOrderResponseModel? GetSpareOrderByBusOrderId(int busOrderId)

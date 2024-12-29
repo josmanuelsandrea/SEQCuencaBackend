@@ -1,9 +1,10 @@
 using ScaneqCuencaBackend.DBModels;
 using Microsoft.EntityFrameworkCore;
-using ScaneqCuencaBackend.Mappings;
 using ScaneqCuencaBackend.Services;
 using ScaneqCuencaBackend.Repository;
 using ScaneqCuencaBackend.Bll;
+using ScaneqCuencaBackend.Configuration.Mappings;
+using ScaneqCuencaBackend.Configuration.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,11 +16,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<PdfService>();
-builder.Services.AddScoped<BusOrdersRepository>();
-builder.Services.AddScoped<SpareOrderBll>();
-builder.Services.AddScoped<PDFDataBll>();
-builder.Services.AddScoped<SpareOrderRepository>();
-builder.Services.AddScoped<SpareRegistryRepository>();
+
+// Add custom services
+ServiceConfiguration.AddCustomServices(builder.Services);
 
 // Get the environment (Development, Staging, Production)
 var environment = builder.Environment.EnvironmentName;

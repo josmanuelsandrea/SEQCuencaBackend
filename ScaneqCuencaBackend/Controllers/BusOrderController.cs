@@ -15,14 +15,12 @@ namespace ScaneqCuencaBackend.Controllers
     // Prueba
     public class BusOrderController : ControllerBase, IOrderController
     {
-        private readonly SeqcuencabackendContext _db;
         private readonly BusOrderBll _busOrderB;
         private readonly IMapper _mapper;
-        public BusOrderController(SeqcuencabackendContext db, IMapper mapper)
+        public BusOrderController(IMapper mapper, BusOrderBll busOrderB)
         {
-            _db = db;
             _mapper = mapper;
-            _busOrderB = new BusOrderBll(db, mapper);
+            _busOrderB = busOrderB;
         }
         [HttpGet]
         public List<WorkOrderResponseModel> GetWorkOrders([FromQuery] string vehicleType)

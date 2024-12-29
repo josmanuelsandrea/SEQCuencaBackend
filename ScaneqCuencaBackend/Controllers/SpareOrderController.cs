@@ -17,21 +17,19 @@ namespace ScaneqCuencaBackend.Controllers
     public class SpareOrderController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly SeqcuencabackendContext _db;
         private readonly SparePartRepository _sparePartRepository;
         private readonly SpareOrderRepository _spareOrderRepository;
         private readonly SpareOrderBll _spareOrderB;
         private readonly PdfService _pdfService;
         private readonly PDFDataBll _pdfDataBll;
-        public SpareOrderController(SeqcuencabackendContext db, IMapper mapper, PdfService pdfService, PDFDataBll pdfDataBll)
+        public SpareOrderController(IMapper mapper, PdfService pdfService, PDFDataBll pdfDataBll, SpareOrderBll spareOrderB, SparePartRepository sparePartRepository, SpareOrderRepository spareOrderRepository)
         {
-            _db = db;
             _mapper = mapper;
-            _sparePartRepository = new(db);
-            _spareOrderB = new(db, mapper);
-            _spareOrderRepository = new(db);
             _pdfService = pdfService;
             _pdfDataBll = pdfDataBll;
+            _spareOrderB = spareOrderB;
+            _sparePartRepository = sparePartRepository;
+            _spareOrderRepository = spareOrderRepository;
         }
 
         [HttpGet("openOrders")]

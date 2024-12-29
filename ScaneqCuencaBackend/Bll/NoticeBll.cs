@@ -8,10 +8,10 @@ namespace ScaneqCuencaBackend.Bll
     {
         private readonly SeqcuencabackendContext _db;
         private readonly NoticeRepository _repository;
-        public NoticeBll(SeqcuencabackendContext db)
+        public NoticeBll(SeqcuencabackendContext db, NoticeRepository repository)
         {
             _db = db;
-            _repository = new NoticeRepository(db);
+            _repository = repository;
         }
 
         public List<Notice> GetAll()

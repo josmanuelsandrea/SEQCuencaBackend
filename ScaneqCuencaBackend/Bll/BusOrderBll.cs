@@ -12,19 +12,15 @@ namespace ScaneqCuencaBackend.Bll
     public class BusOrderBll : IOrderBll<BusOrder>
     {
         private readonly BusOrdersRepository _busOrderR;
-        private readonly CustomerBll _customerB;
         private readonly MaintenanceRegistryRepository _maintenanceRegistriesR;
-        private readonly MaintenanceRegistryBll _maintenanceRegistryBll;
         private readonly SeqcuencabackendContext _db;
         private readonly IMapper _mapper;
-        public BusOrderBll(SeqcuencabackendContext db, IMapper mapper)
+        public BusOrderBll(SeqcuencabackendContext db, IMapper mapper, CustomerBll customerB, BusOrdersRepository busOrderR, MaintenanceRegistryRepository maintenanceRegistriesR)
         {
-            _busOrderR = new BusOrdersRepository(db);
-            _customerB = new CustomerBll(db, mapper);
-            _maintenanceRegistriesR = new MaintenanceRegistryRepository(db);
-            _maintenanceRegistryBll = new MaintenanceRegistryBll(db);
             _mapper = mapper;
             _db = db;
+            _busOrderR = busOrderR;
+            _maintenanceRegistriesR = maintenanceRegistriesR;
         }
 
         public List<WorkOrderResponseModel> GetOrders(string vehicleType)

@@ -3,7 +3,7 @@ using ScaneqCuencaBackend.DBModels;
 using ScaneqCuencaBackend.Models.RequestModels;
 using ScaneqCuencaBackend.Models.ResponseModels;
 
-namespace ScaneqCuencaBackend.Mappings
+namespace ScaneqCuencaBackend.Configuration.Mappings
 {
     public class MappingProfile : Profile
     {

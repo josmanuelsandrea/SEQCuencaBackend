@@ -12,14 +12,12 @@ namespace ScaneqCuencaBackend.Controllers
     [ApiController]
     public class MaintenancesRegistryController : ControllerBase
     {
-        private readonly SeqcuencabackendContext _db;
         private readonly MaintenanceRegistryBll _maintenanceRegistryBll;
         private readonly IMapper _mapper;
-        public MaintenancesRegistryController(SeqcuencabackendContext db, IMapper mapper)
+        public MaintenancesRegistryController(IMapper mapper, MaintenanceRegistryBll maintenanceRegistryBll)
         {
-            _db = db;
-            _maintenanceRegistryBll = new(db);
             _mapper = mapper;
+            _maintenanceRegistryBll = maintenanceRegistryBll;
         }
 
         [HttpGet("order/{id}")]

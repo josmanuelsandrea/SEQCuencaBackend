@@ -15,12 +15,10 @@ namespace ScaneqCuencaBackend.Controllers
     {
         private readonly NoticeBll _noticeB;
         private readonly IMapper _mapper;
-        private readonly SeqcuencabackendContext _db;
-        public NoticeController(SeqcuencabackendContext db, IMapper mapper)
+        public NoticeController(IMapper mapper, NoticeBll noticeB)
         {
-            _db = db;
-            _noticeB = new NoticeBll(_db);
             _mapper = mapper;
+            _noticeB = noticeB;
         }
         // GET: api/<NoticeController>
         [HttpGet]

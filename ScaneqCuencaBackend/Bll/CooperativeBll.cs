@@ -10,11 +10,11 @@ namespace ScaneqCuencaBackend.Bll
         private readonly SeqcuencabackendContext _context;
         private readonly CooperativeRepository _cooperativeR;
         private readonly IMapper _mapper;
-        public CooperativeBll(SeqcuencabackendContext db, IMapper mapper)
+        public CooperativeBll(SeqcuencabackendContext db, IMapper mapper, CooperativeRepository cooperativeR, SeqcuencabackendContext context)
         {
-            _context = db;
-            _cooperativeR = new(db);
             _mapper = mapper;
+            _cooperativeR = cooperativeR;
+            _context = context;
         }
 
         public List<CooperativeResponseModel> GetAllCooperatives()

@@ -8,11 +8,10 @@ namespace ScaneqCuencaBackend.Bll
     {
         private readonly SeqcuencabackendContext _db;
         private readonly MaintenanceRegistryRepository _repositoryMaintenance;
-        public MaintenanceRegistryBll(SeqcuencabackendContext db)
+        public MaintenanceRegistryBll(SeqcuencabackendContext db, MaintenanceRegistryRepository repositoryMaintenance)
         {
             _db = db;
-            _repositoryMaintenance = new(db);
-
+            _repositoryMaintenance = repositoryMaintenance;
         }
 
         public List<MaintenanceRegistry> GetAll() { return _repositoryMaintenance.GetAll(); }

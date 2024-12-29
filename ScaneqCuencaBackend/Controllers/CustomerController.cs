@@ -15,16 +15,14 @@ namespace ScaneqCuencaBackend.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly CustomerBll _customerB;
-        private readonly SeqcuencabackendContext _db;
         private readonly CustomerRepository _repository;
         private readonly IMapper _mapper;
 
-        public CustomerController(SeqcuencabackendContext context, IMapper mapper)
+        public CustomerController(IMapper mapper, CustomerBll customerB, CustomerRepository repository)
         {
-            _db = context;
-            _customerB = new CustomerBll(context, mapper);
-            _repository = new CustomerRepository(context);
             _mapper = mapper;
+            _customerB = customerB;
+            _repository = repository;
         }
         //GET: api/<CustomerController>
         [HttpGet]
