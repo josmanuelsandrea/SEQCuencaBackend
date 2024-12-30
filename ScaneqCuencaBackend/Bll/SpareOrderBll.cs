@@ -11,11 +11,11 @@ namespace ScaneqCuencaBackend.Bll
         private readonly SpareOrderRepository _SpareOrderR;
         private readonly SpareRegistryRepository _SpareRegistryR;
         private readonly SparePartRepository _SparePartR;
-        private readonly BusOrderBll _busOrderB;
+        private readonly Lazy<BusOrderBll> _busOrderB;
         private readonly CustomerBll _CustomerB;
         private readonly IMapper _mapper;
        
-        public SpareOrderBll(IMapper mapper, BusOrderBll busOrderB, CustomerBll customerB, SpareOrderRepository spareOrderR, SpareRegistryRepository spareRegistryR = null, SparePartRepository sparePartR = null)
+        public SpareOrderBll(IMapper mapper, Lazy<BusOrderBll> busOrderB, CustomerBll customerB, SpareOrderRepository spareOrderR, SpareRegistryRepository spareRegistryR, SparePartRepository sparePartR)
         {
 
             _mapper = mapper;
@@ -79,7 +79,7 @@ namespace ScaneqCuencaBackend.Bll
             if (spareOrderR.BusOrderFk.HasValue)
             {
                 // Check if the order exists
-                var foundOrder = _busOrderB.GetWorkOrderById(spareOrderR.BusOrderFk.Value);
+                var foundOrder = _busOrderB.Value.GetWorkOrderById(spareOrderR.BusOrderFk.Value);
                 if (foundOrder.Data == null)
                 {
                     return null;

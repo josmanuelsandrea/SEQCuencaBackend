@@ -7,9 +7,9 @@ namespace ScaneqCuencaBackend.Bll
     public class PDFDataBll
     {
         private readonly BusOrdersRepository _busOrderRepository;
-        private readonly SpareOrderBll _spareOrderBll;
+        private readonly Lazy<SpareOrderBll> _spareOrderBll;
 
-        public PDFDataBll(BusOrdersRepository busOrderRepository, SpareOrderRepository spareOrderRepository, SpareRegistryRepository spareRegistryRepository, SpareOrderBll spareOrderBll)
+        public PDFDataBll(BusOrdersRepository busOrderRepository, SpareOrderRepository spareOrderRepository, SpareRegistryRepository spareRegistryRepository, Lazy<SpareOrderBll> spareOrderBll)
         {
             _busOrderRepository = busOrderRepository;
             _spareOrderBll = spareOrderBll;
@@ -20,7 +20,7 @@ namespace ScaneqCuencaBackend.Bll
             var workOrder = _busOrderRepository.GetWorkOrderByNumber(workOrderId);
             if (workOrder == null) { return null; }
 
-            var SpareRegister = _spareOrderBll.GetSpareOrderByBusOrderId(workOrder.Id);
+            var SpareRegister = _spareOrderBll.Value.GetSpareOrderByBusOrderId(workOrder.Id);
 
             List<PDFRequestModels.SpareList> spareLists = new List<PDFRequestModels.SpareList>();
             if (SpareRegister != null)

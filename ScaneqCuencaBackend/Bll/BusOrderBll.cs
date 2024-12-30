@@ -14,14 +14,16 @@ namespace ScaneqCuencaBackend.Bll
     {
         private readonly BusOrdersRepository _busOrderR;
         private readonly MaintenanceRegistryRepository _maintenanceRegistriesR;
+        private readonly Lazy<SpareOrderBll> _spareOrderB;
         private readonly SeqcuencabackendContext _db;
         private readonly IMapper _mapper;
-        public BusOrderBll(SeqcuencabackendContext db, IMapper mapper, BusOrdersRepository busOrderR, MaintenanceRegistryRepository maintenanceRegistriesR)
+        public BusOrderBll(SeqcuencabackendContext db, IMapper mapper, BusOrdersRepository busOrderR, MaintenanceRegistryRepository maintenanceRegistriesR, Lazy<SpareOrderBll> spareOrderB)
         {
             _mapper = mapper;
             _db = db;
             _busOrderR = busOrderR;
             _maintenanceRegistriesR = maintenanceRegistriesR;
+            _spareOrderB = spareOrderB;
         }
 
         public ApiResponse<List<WorkOrderResponseModel>> GetOrders(string vehicleType)
@@ -119,6 +121,18 @@ namespace ScaneqCuencaBackend.Bll
                         // Si falla la adición de registros de mantenimiento, revierte la transacción
                         transaction.Rollback();
                         return new ApiResponse<BusOrder?>(null, ResponseMessages.ERROR_DURING_THE_REQUESTED_PROCESS, HttpStatusCode.InternalServerError);
+                    }
+
+                    SpareOrderRequest newSpareOrder = new()
+                    {
+                        BusOrderFk = OperationResultWorkOrder.Id,
+                        CustomerFk = null
+                    };
+
+                    var result = _spareOrderB.Value.CreateOrder(newSpareOrder);
+                    if (result == null)
+                    {
+                        transaction.Rollback();
                     }
 
                     // Confirma la transacción

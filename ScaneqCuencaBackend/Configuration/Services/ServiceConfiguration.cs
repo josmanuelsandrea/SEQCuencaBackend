@@ -9,43 +9,35 @@ namespace ScaneqCuencaBackend.Configuration.Services
 
         public static void AddCustomServices(IServiceCollection services)
         {
-            // PDF Services
+            // Register BLL classes with Lazy<T> dependencies
             services.AddScoped<PDFDataBll>();
-
-            // BusOrders Services
-            services.AddScoped<BusOrdersRepository>();
-
             services.AddScoped<BusOrderBll>();
-
-            // Cooperative services
-            services.AddScoped<CooperativeBll>();
-            services.AddScoped<CooperativeRepository>();
-
-            // Customer services
-            services.AddScoped<CustomerBll>();
-            services.AddScoped<CustomerRepository>();
-
-            // MaintenanceRegistry services
-            services.AddScoped<MaintenanceRegistryBll>();
-            services.AddScoped<MaintenanceRegistryRepository>();
-
-            // Notice services
-            services.AddScoped<NoticeBll>();
-            services.AddScoped<NoticeRepository>();
-
-            // SpareOrder services
             services.AddScoped<SpareOrderBll>();
+            services.AddScoped<TrackingBll>();
+            services.AddScoped<MaintenanceRegistryBll>();
+            services.AddScoped<CustomerBll>();
+            services.AddScoped<NoticeBll>();
+            services.AddScoped<CooperativeBll>();
+            services.AddScoped<VehicleBll>();
 
+            // Ensure Lazy<T> dependencies are resolved
+            services.AddScoped(provider => new Lazy<SpareOrderBll>(() => provider.GetRequiredService<SpareOrderBll>()));
+            services.AddScoped(provider => new Lazy<BusOrderBll>(() => provider.GetRequiredService<BusOrderBll>()));
+            services.AddScoped(provider => new Lazy<TrackingBll>(() => provider.GetRequiredService<TrackingBll>()));
+
+            // Repository registrations
+            services.AddScoped<BusOrdersRepository>();
             services.AddScoped<SpareOrderRepository>();
             services.AddScoped<SpareRegistryRepository>();
             services.AddScoped<SparePartRepository>();
-
-            // Tracking services
-            services.AddScoped<TrackingBll>();
-
-            // Vehicle services
-            services.AddScoped<VehicleBll>();
             services.AddScoped<VehicleRepository>();
+            services.AddScoped<NoticeRepository>();
+            services.AddScoped<MaintenanceRegistryRepository>();
+            services.AddScoped<CustomerRepository>();
+            services.AddScoped<CooperativeRepository>();
+
+
+            // Add other required services as needed
         }
     }
 }
