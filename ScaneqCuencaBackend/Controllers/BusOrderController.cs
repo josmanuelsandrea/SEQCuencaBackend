@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ScaneqCuencaBackend.Bll;
-using ScaneqCuencaBackend.DBModels;
 using ScaneqCuencaBackend.Helpers;
 using ScaneqCuencaBackend.Interfaces;
+using ScaneqCuencaBackend.Models;
 using ScaneqCuencaBackend.Models.RequestModels;
 using ScaneqCuencaBackend.Models.ResponseModels;
+using System.Net;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 namespace ScaneqCuencaBackend.Controllers
@@ -23,132 +24,107 @@ namespace ScaneqCuencaBackend.Controllers
             _busOrderB = busOrderB;
         }
         [HttpGet]
-        public List<WorkOrderResponseModel> GetWorkOrders([FromQuery] string vehicleType)
+        public ActionResult<ApiResponse<List<WorkOrderResponseModel?>>> GetWorkOrders([FromQuery] string vehicleType)
         {
             if (vehicleType == null)
             {
-                return new List<WorkOrderResponseModel>();
+                return StatusCode((int)HttpStatusCode.NotFound, new List<WorkOrderResponseModel>());
             }
-            return _busOrderB.GetOrders(vehicleType);
+
+            var result = _busOrderB.GetOrders(vehicleType);
+            return StatusCode((int)result.StatusCode, result);
         }
 
         [HttpGet("warranty")]
-        public List<WorkOrderResponseModel> GetWarrantyOrders()
+        public ActionResult<ApiResponse<List<WorkOrderResponseModel>>> GetWarrantyOrders()
         {
-            return _busOrderB.GetWarrantyOrders();
+            var result = _busOrderB.GetWarrantyOrders();
+            return StatusCode((int)result.StatusCode, result);
         }
         [HttpGet("vehicle/{id}")]
-        public List<WorkOrderResponseModel> GetWorkOrderByVehicleId(int id)
+        public ActionResult<ApiResponse<List<WorkOrderResponseModel>>> GetWorkOrderByVehicleId(int id)
         {
-            return _busOrderB.GetWorkOrderByVehicleId(id);
+            var result = _busOrderB.GetWorkOrderByVehicleId(id);
+            return StatusCode((int)result.StatusCode, result);
         }
 
         [HttpGet("customer/{id}")]
-        public List<WorkOrderResponseModel> GetWorkOrderByCustomerId(int id)
+        public ActionResult<ApiResponse<List<WorkOrderResponseModel>>> GetWorkOrderByCustomerId(int id)
         {
-            return _busOrderB.GetAllWorkOrdersByCustomerId(id);
+            var result = _busOrderB.GetAllWorkOrdersByCustomerId(id);
+            return StatusCode((int)result.StatusCode, result);
         }
 
         // GET: api/<BusOrderController>
         [HttpGet("{id}")]
-        public WorkOrderResponseModel GetOrderByFid(int id)
+        public ActionResult<ApiResponse<WorkOrderResponseModel>> GetOrderByFid(int id)
         {
             var result = _busOrderB.GetWorkOrderByFid(id);
-            var WorkOrderResponse = _mapper.Map<WorkOrderResponseModel>(result);
 
-            return WorkOrderResponse;
+            return StatusCode((int)result.StatusCode, result);
         }
 
         [HttpPost]
-        public ActionResult<GenericResponse<WorkOrderResponseModel>> Post([FromBody] WorkOrderRequestModel data)
+        public ActionResult<ApiResponse<WorkOrderResponseModel>> Post([FromBody] WorkOrderRequestModel data)
         {
             var result = _busOrderB.CreateWorkOrder(data);
-            var WorkOrderResponse = _mapper.Map<WorkOrderResponseModel>(result);
-
-            if (result == null)
+            if (result.Data == null)
             {
-                return BadRequest(new GenericResponse<WorkOrderResponseModel>()
-                {
-                    Code = 400,
-                    Message = ResponseMessages.UNKNOWN_ERROR,
-                    Model = WorkOrderResponse
-                });
+                return StatusCode((int)result.StatusCode, result);
             }
 
-            return Ok(new GenericResponse<WorkOrderResponseModel>()
-            {
-                Code = 200,
-                Model = WorkOrderResponse,
-                Message = ResponseMessages.SUCCESS
-            });
+            var WorkOrderResponse = _mapper.Map<WorkOrderResponseModel>(result.Data);
+
+            return StatusCode((int)result.StatusCode, new ApiResponse<WorkOrderResponseModel>(WorkOrderResponse, result.Message, HttpStatusCode.OK));
         }
+
         [HttpPost("range")]
-        public List<WorkOrderResponseModel> GetWorkOrdersByRangeNumber([FromQuery] string vehicleType, [FromBody] WorkOrderRange range)
+        public ActionResult<ApiResponse<List<WorkOrderResponseModel>>> GetWorkOrdersByRangeNumber([FromQuery] string vehicleType, [FromBody] WorkOrderRange range)
         {
             if (vehicleType == null)
             {
-                return new List<WorkOrderResponseModel>();
+                return StatusCode((int)HttpStatusCode.NotFound, new List<WorkOrderResponseModel>());
             }
-            var results = _busOrderB.GetWorkOrdersByFid(vehicleType, range);
-            return results;
+            var result = _busOrderB.GetWorkOrdersByFid(vehicleType, range);
+            return StatusCode((int)result.StatusCode, result);
         }
 
         [HttpPost("dates")]
-        public List<WorkOrderResponseModel> GetWorkOrdersByRangeNumber([FromQuery] string vehicleType, [FromBody] WorkOrderDate range)
+        public ActionResult<List<WorkOrderResponseModel>> GetWorkOrdersByRangeDate([FromQuery] string vehicleType, [FromBody] WorkOrderDate range)
         {
             if (vehicleType == null)
             {
-                return new List<WorkOrderResponseModel>();
+                return StatusCode((int)HttpStatusCode.NotFound, new List<WorkOrderResponseModel>());
             }
-            var results = _busOrderB.GetWorkOrdersByDateRange(vehicleType, range);
-            return results;
+            var result = _busOrderB.GetWorkOrdersByDateRange(vehicleType, range);
+            return StatusCode((int)result.StatusCode, result);
         }
 
         [HttpPut]
-        public ActionResult<GenericResponse<WorkOrderResponseModel>> Update([FromBody] WorkOrderEditRequestModel data)
+        public ActionResult<ApiResponse<WorkOrderResponseModel>> Update([FromBody] WorkOrderEditRequestModel data)
         {
             var result = _busOrderB.EditWorkOrder(data);
-            var WorkOrderResponse = _mapper.Map<WorkOrderResponseModel>(result);
 
-            if (result == null)
+            if (result.Data == null)
             {
-                return BadRequest(new GenericResponse<WorkOrderResponseModel>()
-                {
-                    Message = ResponseMessages.UNKNOWN_ERROR,
-                    Code = 400,
-                    Model = WorkOrderResponse
-                });
+                return StatusCode((int)HttpStatusCode.NotFound, result);
             }
 
-            return Ok(new GenericResponse<WorkOrderResponseModel>()
-            {
-                Message = ResponseMessages.SUCCESS,
-                Code = 200,
-                Model = WorkOrderResponse
-            });
+            var mappingResponse = _mapper.Map<WorkOrderResponseModel>(result.Data);
+            return StatusCode((int)result.StatusCode, new ApiResponse<WorkOrderResponseModel>(mappingResponse, result.Message, HttpStatusCode.OK));
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<GenericResponse<int?>> Delete(int id)
+        public ActionResult<ApiResponse<int?>> Delete(int id)
         {
             var result = _busOrderB.DeleteWorkOrder(id);
 
-            if (result == null)
+            if (result.Data == null)
             {
-                return BadRequest(new GenericResponse<int?>()
-                {
-                    Message = ResponseMessages.UNKNOWN_ERROR,
-                    Code = 400,
-                    Model = result
-                });
+                return StatusCode((int)HttpStatusCode.NotFound, result);
             }
 
-            return Ok(new GenericResponse<int?>()
-            {
-                Message = ResponseMessages.SUCCESS,
-                Code = 200,
-                Model = result
-            });
+            return StatusCode((int)result.StatusCode, result);
         }
     }
 }

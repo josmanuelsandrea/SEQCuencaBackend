@@ -43,8 +43,8 @@ namespace ScaneqCuencaBackend.Bll
                     continue;
                 }
 
-                var workOrders = _busOrderB.GetWorkOrderByVehicleId(vehicle.Id);
-                var sortedWorkOrders = workOrders
+                var result = _busOrderB.GetWorkOrderByVehicleId(vehicle.Id);
+                var sortedWorkOrders = result.Data
                     .Where(wo => wo.Kilometers > 0)
                     .OrderBy(wo => wo.Kilometers)
                     .ToList();
@@ -52,7 +52,7 @@ namespace ScaneqCuencaBackend.Bll
                 // Calculated data
                 var dailyKilometersAverages = new List<double>();
 
-                if (workOrders.Count < 2)
+                if (result.Data.Count < 2)
                 {
                     continue;
                 }
@@ -79,7 +79,7 @@ namespace ScaneqCuencaBackend.Bll
                     overallAverageDailyKilometers = dailyKilometersAverages.Average();
                 }
 
-                var mostRecentOrder = workOrders.OrderBy(wo => wo.Fid).ToList().Last();
+                var mostRecentOrder = result.Data.OrderBy(wo => wo.Fid).ToList().Last();
                 var currentDate = DateOnly.FromDateTime(DateTime.Now);
 
                 var daysSinceLastOilOrder = (currentDate.ToDateTime(TimeOnly.MinValue) - lastOilEngineWorkOrder.OrderFk.DateField.ToDateTime(TimeOnly.MinValue)).TotalDays;
@@ -121,15 +121,15 @@ namespace ScaneqCuencaBackend.Bll
                     continue;
                 }
 
-                var workOrders = _busOrderB.GetWorkOrderByVehicleId(vehicle.Id);
-                var sortedWorkOrders = workOrders
+                var result = _busOrderB.GetWorkOrderByVehicleId(vehicle.Id);
+                var sortedWorkOrders = result.Data
                     .Where(wo => wo.Kilometers > 0)
                     .OrderBy(wo => wo.Kilometers)
                     .ToList();
 
                 var dailyKilometersAverages = new List<double>();
 
-                if (workOrders.Count < 2)
+                if (result.Data.Count < 2)
                 {
                     continue;
                 }
@@ -156,7 +156,7 @@ namespace ScaneqCuencaBackend.Bll
                     overallAverageDailyKilometers = dailyKilometersAverages.Average();
                 }
 
-                var mostRecentOrder = workOrders.OrderBy(wo => wo.Fid).ToList().Last();
+                var mostRecentOrder = result.Data.OrderBy(wo => wo.Fid).ToList().Last();
                 var currentDate = DateOnly.FromDateTime(DateTime.Now);
                 var daysSinceMostRecentOrder = (currentDate.ToDateTime(TimeOnly.MinValue) - mostRecentOrder.DateField.ToDateTime(TimeOnly.MinValue)).TotalDays;
                 var estimatedCurrentKilometer = (overallAverageDailyKilometers * daysSinceMostRecentOrder) + mostRecentOrder.Kilometers;

@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using ScaneqCuencaBackend.DBModels;
+using ScaneqCuencaBackend.Helpers;
 using ScaneqCuencaBackend.Interfaces;
+using ScaneqCuencaBackend.Models;
 using ScaneqCuencaBackend.Models.RequestModels;
 using ScaneqCuencaBackend.Models.ResponseModels;
 using ScaneqCuencaBackend.Repository;
+using System.Net;
 
 namespace ScaneqCuencaBackend.Bll
 {
@@ -15,7 +16,7 @@ namespace ScaneqCuencaBackend.Bll
         private readonly MaintenanceRegistryRepository _maintenanceRegistriesR;
         private readonly SeqcuencabackendContext _db;
         private readonly IMapper _mapper;
-        public BusOrderBll(SeqcuencabackendContext db, IMapper mapper, CustomerBll customerB, BusOrdersRepository busOrderR, MaintenanceRegistryRepository maintenanceRegistriesR)
+        public BusOrderBll(SeqcuencabackendContext db, IMapper mapper, BusOrdersRepository busOrderR, MaintenanceRegistryRepository maintenanceRegistriesR)
         {
             _mapper = mapper;
             _db = db;
@@ -23,55 +24,60 @@ namespace ScaneqCuencaBackend.Bll
             _maintenanceRegistriesR = maintenanceRegistriesR;
         }
 
-        public List<WorkOrderResponseModel> GetOrders(string vehicleType)
+        public ApiResponse<List<WorkOrderResponseModel>> GetOrders(string vehicleType)
         {
             var response = _busOrderR.GetOrders(vehicleType);
             var mappingResult = _mapper.Map<List<WorkOrderResponseModel>>(response);
 
-            return mappingResult;
+            return new ApiResponse<List<WorkOrderResponseModel>>(mappingResult, ResponseMessages.SUCCESS, HttpStatusCode.OK);
         }
 
-        public WorkOrderResponseModel GetWorkOrderById(int id)
+        public ApiResponse<WorkOrderResponseModel?> GetWorkOrderById(int id)
         {
-            BusOrder? workOrderFound = _busOrderR.GetWorkOrderById(id);
-            var mappingResult = _mapper.Map<WorkOrderResponseModel>(workOrderFound);
 
-            return mappingResult;
+            BusOrder? workOrderFound = _busOrderR.GetWorkOrderById(id);
+            if (workOrderFound == null)
+            {
+                return new ApiResponse<WorkOrderResponseModel?>(null, ResponseMessages.RESOURCE_NOT_FOUND, HttpStatusCode.OK);
+            }
+
+            var mappingResult = _mapper.Map<WorkOrderResponseModel>(workOrderFound);
+            return new ApiResponse<WorkOrderResponseModel?>(mappingResult, ResponseMessages.SUCCESS, HttpStatusCode.OK);
         }
 
-        public WorkOrderResponseModel GetWorkOrderByFid(int id)
+        public ApiResponse<WorkOrderResponseModel> GetWorkOrderByFid(int id)
         {
             BusOrder? workOrderFound = _busOrderR.GetWorkOrderByNumber(id);
             var mappingResult = _mapper.Map<WorkOrderResponseModel>(workOrderFound);
 
-            return mappingResult;
+            return new ApiResponse<WorkOrderResponseModel>(mappingResult, ResponseMessages.SUCCESS, HttpStatusCode.OK);
         }
 
-        public List<WorkOrderResponseModel> GetWarrantyOrders()
+        public ApiResponse<List<WorkOrderResponseModel>> GetWarrantyOrders()
         {
             List<BusOrder> workOrderFound = _busOrderR.GetAllOrders().Where(entity => entity.Iswarranty == true).ToList();
             var response = _mapper.Map<List<WorkOrderResponseModel>>(workOrderFound);
 
-            return response;
+            return new ApiResponse<List<WorkOrderResponseModel>>(response, ResponseMessages.SUCCESS, HttpStatusCode.OK);
         }
 
-        public List<WorkOrderResponseModel> GetWorkOrderByVehicleId(int id)
+        public ApiResponse<List<WorkOrderResponseModel>> GetWorkOrderByVehicleId(int id)
         {
             List<BusOrder> result = _busOrderR.GetOrderByVehicleId(id);
             var response = _mapper.Map<List<WorkOrderResponseModel>>(result);
 
-            return response;
+            return new ApiResponse<List<WorkOrderResponseModel>>(response, ResponseMessages.SUCCESS, HttpStatusCode.OK);
         }
 
-        public List<WorkOrderResponseModel> GetAllWorkOrdersByCustomerId(int customerId)
+        public ApiResponse<List<WorkOrderResponseModel>> GetAllWorkOrdersByCustomerId(int customerId)
         {
             List<BusOrder> result = _busOrderR.GetAllWorkOrdersByCustomerId(customerId);
             var response = _mapper.Map<List<WorkOrderResponseModel>>(result);
 
-            return response;
+            return new ApiResponse<List<WorkOrderResponseModel>>(response, ResponseMessages.SUCCESS, HttpStatusCode.OK);
         }
 
-        public BusOrder? CreateWorkOrder(WorkOrderRequestModel model)
+        public ApiResponse<BusOrder?> CreateWorkOrder(WorkOrderRequestModel model)
         {
             // Check if the order by given fid already exists
 
@@ -82,7 +88,7 @@ namespace ScaneqCuencaBackend.Bll
             {
                 if (foundOrder.VehicleType == model.VehicleType)
                 {
-                    return null;
+                    return new ApiResponse<BusOrder?>(null, ResponseMessages.ORDER_ALREADY_EXISTS, HttpStatusCode.Conflict);
                 }
 
                 // If the order already exists, then return null | error
@@ -102,7 +108,7 @@ namespace ScaneqCuencaBackend.Bll
                     if (OperationResultWorkOrder == null)
                     {
                         transaction.Rollback();
-                        return null;
+                        return new ApiResponse<BusOrder?>(null, ResponseMessages.RESOURCE_NOT_FOUND, HttpStatusCode.NotFound);
                     }
 
                     mapRegistries.ForEach(registry => registry.OrderFkId = OperationResultWorkOrder.Id);
@@ -112,14 +118,14 @@ namespace ScaneqCuencaBackend.Bll
                     {
                         // Si falla la adición de registros de mantenimiento, revierte la transacción
                         transaction.Rollback();
-                        return null;
+                        return new ApiResponse<BusOrder?>(null, ResponseMessages.ERROR_DURING_THE_REQUESTED_PROCESS, HttpStatusCode.InternalServerError);
                     }
 
                     // Confirma la transacción
                     transaction.Commit();
 
                     // Retorna la orden de trabajo creada
-                    return OperationResultWorkOrder;
+                    return new ApiResponse<BusOrder?>(OperationResultWorkOrder, ResponseMessages.SUCCESS, HttpStatusCode.OK);
                 }
                 catch (Exception)
                 {
@@ -129,30 +135,30 @@ namespace ScaneqCuencaBackend.Bll
             }
         }
 
-        public List<WorkOrderResponseModel> GetWorkOrdersByFid(string vehicleType, WorkOrderRange range)
+        public ApiResponse<List<WorkOrderResponseModel>> GetWorkOrdersByFid(string vehicleType, WorkOrderRange range)
         {
             var results = _busOrderR.GetBusOrdersByFidRange(vehicleType, range);
             var response = _mapper.Map<List<WorkOrderResponseModel>>(results);
 
-            return response;
+            return new ApiResponse<List<WorkOrderResponseModel>>(response, ResponseMessages.SUCCESS, HttpStatusCode.OK);
         }
 
-        public List<WorkOrderResponseModel> GetWorkOrdersByDateRange(string vehicleType, WorkOrderDate dates)
+        public ApiResponse<List<WorkOrderResponseModel>> GetWorkOrdersByDateRange(string vehicleType, WorkOrderDate dates)
         {
             var results = _busOrderR.GetBusOrdersByDateRange(vehicleType, dates);
             var response = _mapper.Map<List<WorkOrderResponseModel>>(results);
 
-            return response;
+            return new ApiResponse<List<WorkOrderResponseModel>>(response, ResponseMessages.SUCCESS, HttpStatusCode.OK);
         }
 
-        public BusOrder? EditWorkOrder(WorkOrderEditRequestModel model)
+        public ApiResponse<BusOrder?> EditWorkOrder(WorkOrderEditRequestModel model)
         {
             var maintenanceRegistryMapping = _mapper.Map<List<MaintenanceRegistry>>(model.maintenances);
             var foundWorkOrder = _busOrderR.GetWorkOrderByNumber(model.Fid);
 
             if (foundWorkOrder == null)
             {
-                return null;
+                return new ApiResponse<BusOrder?>(null, ResponseMessages.RESOURCE_NOT_FOUND, HttpStatusCode.NotFound);
             }
 
             using (var transaction = _db.Database.BeginTransaction())
@@ -163,7 +169,7 @@ namespace ScaneqCuencaBackend.Bll
                     if (OperationResultOrder == null)
                     {
                         transaction.Rollback();
-                        return null;
+                        return new ApiResponse<BusOrder?>(null, ResponseMessages.RESOURCE_NOT_FOUND, HttpStatusCode.NotFound);
                     }
 
                     if (maintenanceRegistryMapping.Count > 0)
@@ -172,7 +178,7 @@ namespace ScaneqCuencaBackend.Bll
                         if (OperationResultMaintenanceRegistries == null)
                         {
                             transaction.Rollback();
-                            return null;
+                            return new ApiResponse<BusOrder?>(null, ResponseMessages.RESOURCE_NOT_FOUND, HttpStatusCode.NotFound);
                         }
                     } else
                     {
@@ -182,7 +188,7 @@ namespace ScaneqCuencaBackend.Bll
                     }
 
                     transaction.Commit();
-                    return foundWorkOrder;
+                    return new ApiResponse<BusOrder?>(foundWorkOrder, ResponseMessages.SUCCESS, HttpStatusCode.OK);
                 } catch (Exception)
                 {
                     transaction.Rollback();
@@ -191,7 +197,7 @@ namespace ScaneqCuencaBackend.Bll
             }
         }
 
-        public int? DeleteWorkOrder(int id)
+        public ApiResponse<int?> DeleteWorkOrder(int id)
         {
             using (var transaction = _db.Database.BeginTransaction())
             {
@@ -201,11 +207,11 @@ namespace ScaneqCuencaBackend.Bll
                     if (orderResult == null)
                     {
                         transaction.Rollback();
-                        return null;
+                        return new ApiResponse<int?>(null, ResponseMessages.RESOURCE_NOT_FOUND, HttpStatusCode.NotFound);
                     }
 
                     transaction.Commit();
-                    return id;
+                    return new ApiResponse<int?>(id, ResponseMessages.SUCCESS, HttpStatusCode.OK);
                 } catch(Exception)
                 {
                     transaction.Rollback(); throw;

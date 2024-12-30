@@ -80,12 +80,12 @@ namespace ScaneqCuencaBackend.Bll
             {
                 // Check if the order exists
                 var foundOrder = _busOrderB.GetWorkOrderById(spareOrderR.BusOrderFk.Value);
-                if (foundOrder == null)
+                if (foundOrder.Data == null)
                 {
                     return null;
                 }
                 // Check if already exists an order assigned to the workorder
-                var existingOrder = _SpareOrderR.GetAll().ToList().Where(entity => entity.BusOrderFk == foundOrder.Id).FirstOrDefault();
+                var existingOrder = _SpareOrderR.GetAll().ToList().Where(entity => entity.BusOrderFk == foundOrder.Data.Id).FirstOrDefault();
                 if (existingOrder != null)
                 {
                     return null;

@@ -35,8 +35,10 @@ namespace ScaneqCuencaBackend.Configuration.Services
 
             // SpareOrder services
             services.AddScoped<SpareOrderBll>();
+
             services.AddScoped<SpareOrderRepository>();
             services.AddScoped<SpareRegistryRepository>();
+            services.AddScoped<SparePartRepository>();
 
             // Tracking services
             services.AddScoped<TrackingBll>();
